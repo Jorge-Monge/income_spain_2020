@@ -5,6 +5,8 @@ import PopupTemplate from "@arcgis/core/PopupTemplate"
 
 import "./App.css"
 
+// Just a comment
+
 const App = () => {
   const mapDiv = useRef(null)
 
