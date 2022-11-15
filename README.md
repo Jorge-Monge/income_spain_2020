@@ -13,6 +13,15 @@
 
   - Use create-react-app to initialize a React app with NPM in the current folder
     > > npx create-react-app .
+  - Esri Calcite Icons: https://github.com/Esri/calcite-components-examples/tree/master/react
+    - Install Esri Calcite UI Icons https://esri.github.io/calcite-ui-icons/
+      > > npm install @esri/calcite-ui-icons
+    - Install the 'ncp' Node package, and add the 'postinstall' and 'copy' scripts to 'package.json'
+    - Install Esri Calcite Components React
+      This package includes the compatible version of the main component library as a dependency, so no need to install @esri/calcite-components separately.
+      > > npm install @esri/calcite-components-react
+    - Install the Calcite assets locally
+      > > npm run copy
 
 - #### Outcome
 

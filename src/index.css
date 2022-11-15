@@ -1,1 +1,6 @@
 @import "https://js.arcgis.com/4.25/@arcgis/core/assets/esri/themes/light/main.css";
+
+body {
+  padding: 0;
+  margin: 0;
+}

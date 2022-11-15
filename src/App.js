@@ -1,60 +1,59 @@
-import React, { useRef, useEffect } from "react"
-import MapView from "@arcgis/core/views/MapView"
-import WebMap from "@arcgis/core/WebMap"
-import PopupTemplate from "@arcgis/core/PopupTemplate"
+import React, { Fragment, useState, createRef, useRef, useEffect } from "react"
+import createMapView from "./utils/map"
+import Dropdown from "./components/Dropdown"
+import Picklist from "./components/Picklist"
+//import BasemapToggle from "@arcgis/core/widgets/BasemapToggle"
 
-import "./App.css"
-
-// Just a comment
+import classes from "./App.modules.css"
 
 const App = () => {
-  const mapDiv = useRef(null)
+  const [mapView, setMapView] = useState()
+
+  const mapRef = useRef(null)
+
+  const onListItemPicked = (e) => {
+    console.log("Event:", e)
+  }
 
   useEffect(() => {
-    const map = new WebMap({
-      portalItem: {
-        id: "711ea17ce6fa468699d749cb36ac0fb4",
-      },
-      basemap: "dark-gray-vector",
-      apikey: "",
-    })
+    let myView
 
-    const myView = new MapView({
-      container: mapDiv.current,
-      map,
-      center: [-3, 40],
-      zoom: 5,
-    })
-
-    myView.when(() => {
-      const uniqueLayer = map.layers.items[0]
-      myView.whenLayerView(uniqueLayer).then(() => {
-        // Census sections layer
-        const items = uniqueLayer.allSublayers.items
-        items.forEach((item, index) => {
-          if (index > 0) {
-            item.popupEnabled = false
-          }
-        })
-
-        const sectionsLevelLyr = uniqueLayer.allSublayers.items[0]
-
-        sectionsLevelLyr.popupTemplate = new PopupTemplate({
-          title: "Municipio: {NMUN}",
-          content: [
-            {
-              type: "fields",
-              fieldInfos: [{ fieldName: "NMUN", label: "Municipio:" }],
-            },
-          ],
-        })
+    if (!mapView) {
+      console.log("Creating the map view")
+      myView = createMapView(mapRef.current)
+      myView.when(() => {
+        setMapView(myView)
       })
-    })
+    }
+  }, [mapView])
 
-    return () => myView && myView.destroy()
-  }, [])
+  useEffect(() => {
+    console.log("In useEffect. mapView:", mapView)
 
-  return <div className="mapDiv" ref={mapDiv} />
+    if (mapView?.ready) {
+      console.log("mapView ready:", mapView.ready)
+      mapView.when(() => {
+        console.log("mapView UI:", mapView.ui)
+
+        // let d = document.createElement("div")
+        // let c = document.createTextNode("Hola")
+        // d.appendChild(c)
+        // d.className = "tempDiv"
+        // d.id = "tempDiv"
+
+        // mapView.ui.add(d, "top-right")
+      })
+    }
+  }, [mapView])
+
+  return (
+    <React.Fragment>
+      <div className="mapDiv" ref={mapRef} />
+      <div class="viewTopRight">
+        <Picklist onItemPicked={onListItemPicked} />
+      </div>
+    </React.Fragment>
+  )
 }
 
 export default App
