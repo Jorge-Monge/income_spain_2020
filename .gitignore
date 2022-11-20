@@ -1,6 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 README_ORIGINAL_CREATEREACTAPP.md
+.env
 
 
 

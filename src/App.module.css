@@ -1,0 +1,53 @@
+.mapDiv {
+  height: 100vh;
+  width: 100vw;
+}
+
+.viewTopRight {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+}
+
+.viewBottomRight {
+  position: absolute;
+  display: flex;
+  /* So that, when the legend is appended, it displays above the 'Show legend button */
+  flex-direction: column-reverse;
+  row-gap: 20px;
+  align-items: flex-end;
+  bottom: 30px;
+  right: 15px;
+  cursor: pointer;
+}
+
+.topBanner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 80vw;
+  padding: 2px;
+  background-color: black;
+}
+
+.mapTitle {
+  font-size: 20px;
+  color: white;
+  padding: 8px;
+}
+
+.layerPicklist {
+  margin-top: 15px;
+  border: solid black 2px;
+}
+
+@media only screen and (max-width: 600px) {
+  .mapTitle {
+    font-size: 15px;
+    padding: 6px;
+  }
+}

@@ -1,56 +1,26 @@
 import "@esri/calcite-components/dist/components/calcite-pick-list"
-import "@esri/calcite-components/dist/components/calcite-pick-list-item"
 import "@esri/calcite-components/dist/components/calcite-action"
 import "@esri/calcite-components/dist/components/calcite-icon"
 
-import {
-  CalcitePickList,
-  CalcitePickListItem,
-  CalciteAction,
-} from "@esri/calcite-components-react"
+import PicklistItem from "./PicklistItem"
 
-import "@esri/calcite-components/dist/calcite/calcite.css"
+import { CalcitePickList } from "@esri/calcite-components-react"
 
-const Picklist = ({ onItemPicked }) => {
+const Picklist = ({ webmaps, onItemPicked, selectedLyrItemId }) => {
   return (
     <CalcitePickList>
-      <CalcitePickListItem
-        label="Population"
-        description="This is the population"
-        value="one"
-        icon="square" // circle, square or grip
-        onCalciteListItemChange={(e) => onItemPicked(e)}
-      >
-        <CalciteAction slot="actions-end" icon="layer"></CalciteAction>
-      </CalcitePickListItem>
-
-      <CalcitePickListItem
-        label="Population"
-        description="This is the population"
-        value="two"
-        icon="square"
-        onCalciteListItemChange={(e) => onItemPicked(e)}
-      >
-        <CalciteAction slot="actions-end" icon="layer"></CalciteAction>
-      </CalcitePickListItem>
-      <CalcitePickListItem
-        label="Population"
-        description="This is the population"
-        value="three"
-        icon="square"
-        onCalciteListItemChange={(e) => onItemPicked(e)}
-      >
-        <CalciteAction slot="actions-end" icon="layer"></CalciteAction>
-      </CalcitePickListItem>
-      <CalcitePickListItem
-        label="Population"
-        description="This is the population"
-        value="four"
-        icon="square"
-        onCalciteListItemChange={(e) => onItemPicked(e)}
-      >
-        <CalciteAction slot="actions-end" icon="layer"></CalciteAction>
-      </CalcitePickListItem>
+      {webmaps.map((i) => (
+        <PicklistItem
+          key={i.sortOrder}
+          webmapId={i.id}
+          label={i.label}
+          description={i.description}
+          value={i.sortOrder}
+          selected={i.sortOrder === selectedLyrItemId ? true : undefined} // Gotcha about false values becoming truthy: https://developers.arcgis.com/calcite-design-system/frameworks/
+          icon="square" // circle, square or grip
+          onItemPicked={onItemPicked}
+        />
+      ))}
     </CalcitePickList>
   )
 }

@@ -5,7 +5,7 @@
 - Display the polygons, styled by a variable
 - Display polygon information upon click events
 - Allow the user to select a different variable to map
-- Allow the user to select a language (EN/SP)
+- When the user selects a different map, maintain the view extent
 
 ### Steps
 
@@ -24,6 +24,11 @@
       > > npm run copy
 
 - #### Outcome
+
+- #### Todo
+
+  - Don't remove the basemap when switching maps
+  - Implement English
 
 - #### Notes
   - Use only ES modules (ESM) via CDN for testing and prototyping, as it is not optimized for fast loading. Instead, build the ES modules locally (via NPM, which what we are doing) or use AMD modules via the ArcGIS CDN.
