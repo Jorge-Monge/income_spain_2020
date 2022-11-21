@@ -27,7 +27,6 @@
 
 - #### Todo
 
-  - New bug with the Legend
   - Implement English
 
 - #### Notes

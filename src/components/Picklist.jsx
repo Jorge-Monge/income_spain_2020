@@ -5,6 +5,7 @@ import "@esri/calcite-components/dist/components/calcite-icon"
 import PicklistItem from "./PicklistItem"
 
 import { CalcitePickList } from "@esri/calcite-components-react"
+import "@esri/calcite-components/dist/calcite/calcite.css"
 
 const Picklist = ({ mapItems, onItemPicked, selectedLyrItemId }) => {
   return (

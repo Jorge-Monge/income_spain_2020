@@ -157,7 +157,7 @@ const App = () => {
             className={classes.layersBtn}
             color="#fff"
             text="Select layer"
-            icon="layer"
+            icon="layers"
             iconSize="l"
           />
         </div>
