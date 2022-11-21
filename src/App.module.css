@@ -3,26 +3,24 @@
   width: 100vw;
 }
 
-.viewTopRight {
+.viewTopRight,
+.viewBottomRight {
   position: absolute;
   display: flex;
-  flex-direction: column;
   align-items: flex-end;
-  top: 15px;
   right: 15px;
   cursor: pointer;
 }
 
+.viewTopRight {
+  flex-direction: column;
+  top: 15px;
+}
+
 .viewBottomRight {
-  position: absolute;
-  display: flex;
-  /* So that, when the legend is appended, it displays above the 'Show legend button */
   flex-direction: column-reverse;
-  row-gap: 20px;
-  align-items: flex-end;
+  row-gap: 15px;
   bottom: 30px;
-  right: 15px;
-  cursor: pointer;
 }
 
 .topBanner {
@@ -48,6 +46,6 @@
 @media only screen and (max-width: 600px) {
   .mapTitle {
     font-size: 15px;
-    padding: 6px;
+    padding: 4px;
   }
 }

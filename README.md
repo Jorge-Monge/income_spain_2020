@@ -2,14 +2,12 @@
 
 ### Objectives
 
-- Display the polygons, styled by a variable
-- Display polygon information upon click events
-- Allow the user to select a different variable to map
-- When the user selects a different map, maintain the view extent
+- Display the different layers related with income information in Spain, 2020.
+- Allow the user to examine all different layers without exiting the application.
+- When users switch to a different layer, the view extent shall be maintained.
+- When users switch to a different layer, don't re-render the basemap layer.
 
-### Steps
-
-- #### Setup
+- #### Setup from scratch
 
   - Use create-react-app to initialize a React app with NPM in the current folder
     > > npx create-react-app .
@@ -20,10 +18,8 @@
     - Install Esri Calcite Components React
       This package includes the compatible version of the main component library as a dependency, so no need to install @esri/calcite-components separately.
       > > npm install @esri/calcite-components-react
-    - Install the Calcite assets locally
+    - Install the Calcite assets locally (this will copy the Calcite assets (the icons, basically) from "node_packages/@esri/calcite-components/dist/calcite/assets" into "public/assets")
       > > npm run copy
-
-- #### Outcome
 
 - #### Todo
 
