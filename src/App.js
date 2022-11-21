@@ -101,7 +101,7 @@ const App = () => {
         // URL points to a cached tiled map service hosted on ArcGIS Server
         url: "https://tiles.arcgis.com/tiles/SEjlCWTAIsMEEXNx/arcgis/rest/services/Renta_neta_media_por_persona_2020/MapServer",
       })
-      console.log(myMap)
+
       myMap.add(tileLayer)
 
       // On focus over the view, close the layer-selection picklist
@@ -118,7 +118,7 @@ const App = () => {
     } else if (tileLayerUrl && mapView) {
       mapView.when(() => {
         // Only 1 layer per webmap
-        myMap.layers.items.forEach((l) => console.log("Layer:", l))
+
         let layerToRemove = myMap.layers.items[0]
         myMap.remove(layerToRemove)
 
@@ -131,7 +131,6 @@ const App = () => {
     }
 
     return () => {
-      console.log("In cleanup function...")
       if (mapView) {
         previousMapViewProperties = {
           center: mapView.center,
