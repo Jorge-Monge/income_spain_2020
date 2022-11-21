@@ -16,7 +16,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "postinstall": "npm run copy",
-    "copy": "ncp ./node_modules/@esri/calcite-components/dist/calcite/assets/ ./public/calcite/assets/"
+    "copy": "ncp ./node_modules/@esri/calcite-components/dist/calcite/assets/ ./public/assets/"
   },
   "eslintConfig": {
     "extends": [
