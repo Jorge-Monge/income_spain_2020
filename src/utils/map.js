@@ -3,13 +3,10 @@ import WebMap from "@arcgis/core/WebMap"
 
 //import PopupTemplate from "@arcgis/core/PopupTemplate"
 
-const createMapView = (viewContainer, webMapId, previousMapViewProperties) => {
+const createMapView = (viewContainer, previousMapViewProperties) => {
   console.log("Previous map view properties:", previousMapViewProperties)
 
   const map = new WebMap({
-    portalItem: {
-      id: webMapId,
-    },
     basemap: "dark-gray-vector",
   })
 

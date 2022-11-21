@@ -1,0 +1,38 @@
+[
+  {
+    "sortOrder": 1,
+    "label": "Renta media por persona"
+  },
+  {
+    "sortOrder": 2,
+    "label": "Renta media por hogar"
+  },
+  {
+    "sortOrder": 3,
+    "label": "Porcentaje de población con ingresos por unidad de consumo menor de 7.500 euros"
+  },
+  {
+    "sortOrder": 4,
+    "label": "Porcentaje de población con ingresos por unidad de consumo menor al 60% de la mediana"
+  },
+  {
+    "sortOrder": 5,
+    "label": "Porcentaje de población con ingresos por unidad de consumo mayor del 200% de la mediana"
+  },
+  {
+    "sortOrder": 6,
+    "label": "Porcentaje de población menor de 18 años con ingresos por unidad de consumo menor del 60% de la mediana"
+  },
+  {
+    "sortOrder": 7,
+    "label": "Porcentaje de población menor de 18 años"
+  },
+  {
+    "sortOrder": 8,
+    "label": "Porcentaje de población mayor de 65 años"
+  },
+  {
+    "sortOrder": 9,
+    "label": "Índice de Gini"
+  }
+]

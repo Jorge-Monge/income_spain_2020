@@ -27,7 +27,7 @@
 
 - #### Todo
 
-  - Don't remove the basemap when switching maps
+  - New bug with the Legend
   - Implement English
 
 - #### Notes

@@ -1,6 +1,8 @@
 import "@esri/calcite-components/dist/components/calcite-icon"
 import { CalciteIcon } from "@esri/calcite-components-react"
 
+//import "@esri/calcite-components/dist/calcite/calcite.css"
+
 const ButtonWithIcon = ({ color, text, icon, iconSize, className }) => {
   return (
     <div

@@ -7,7 +7,7 @@ import ButtonWithIcon from "./components/ButtonWithIcon"
 
 //import BasemapToggle from "@arcgis/core/widgets/BasemapToggle"
 
-import loadedWebmaps from "./data/webmaps.json"
+import mapItems from "./data/mapItems.json"
 
 import classes from "./App.module.css"
 
@@ -16,19 +16,20 @@ let previousMapViewProperties = {
   zoom: 5,
 }
 
-let myView, myMap
+let myMap
 
 const App = () => {
   // startup map title taken from the JSON data's first element
 
   const [mapTitle, setMapTitle] = useState(
-    loadedWebmaps.filter((obj) => obj.sortOrder === 1)[0].label
+    mapItems.filter((obj) => obj.sortOrder === 1)[0].label
   )
-  const [webMapId, setWebMapId] = useState(process.env.REACT_APP_WMID1)
+  const [tileLayerUrl, setTileLayerUrl] = useState(process.env.REACT_APP_TLID1)
   const [selectedLyrItemId, setSelectedLyrItemId] = useState(1)
   const [displayLegend, setDisplayLegend] = useState(false)
   const [showHideLegendText, setshowHideLegendText] = useState("Show legend")
   const [mapView, setMapView] = useState()
+  const [displayLayerList, setDisplayLayerList] = useState(false)
 
   const mapRef = useRef(null)
 
@@ -37,16 +38,16 @@ const App = () => {
     // It does NOT fire for clicks on the currently selected item
     e.preventDefault()
 
-    // Change the webmap in accordance with the item selected in the pick list
+    // Change the tile layer in accordance with the item selected in the pick list
     if (e.detail.selected) {
       setSelectedLyrItemId(e.detail.value)
-      let targetEnvVar = `REACT_APP_WMID${
-        webmaps.filter((w) => w.sortOrder === e.detail.value)[0].sortOrder
+      let targetEnvVar = `REACT_APP_TLID${
+        mapItems.filter((w) => w.sortOrder === e.detail.value)[0].sortOrder
       }`
-      let targetWebmap = process.env[targetEnvVar]
+      let targetTileLayer = process.env[targetEnvVar]
       // If target is other than the current web map
-      if (targetWebmap !== webMapId) {
-        setWebMapId(targetWebmap)
+      if (targetTileLayer !== tileLayerUrl) {
+        setTileLayerUrl(targetTileLayer)
         setMapTitle(e.srcElement.label)
       }
     }
@@ -54,9 +55,6 @@ const App = () => {
     // Hide the layer picklist after a click on an element
     setDisplayLayerList(false)
   }
-
-  const webmaps = useState(loadedWebmaps)[0]
-  const [displayLayerList, setDisplayLayerList] = useState(false)
 
   useEffect(() => {
     /* When the mapView changes, remove the legend container if it exists */
@@ -70,42 +68,41 @@ const App = () => {
   useEffect(() => {
     /* Handle the showing and hiding of the Legend widget */
 
-    if (mapView && mapView.ui) {
-      // Insert a Legend widget in the DOM
-      if (displayLegend) {
-        mapView.when(() => {
-          document
-            .getElementById("viewBottomRight")
-            .appendChild(document.createElement("div")).id = "legendWidget"
-          new Legend({
-            view: mapView,
-            container: "legendWidget",
-          })
-
-          // Change the text in the button
-          setshowHideLegendText("Hide legend")
-        })
-      } else {
-        // Remove the legend container
-
-        if (document.getElementById("legendWidget")) {
-          document.getElementById("legendWidget").remove()
-        }
-        setshowHideLegendText("Show legend")
-      }
+    // If legend widget already created, remove its container beforehand
+    if (document.getElementById("legendWidget")) {
+      document.getElementById("legendWidget").remove()
     }
-  }, [displayLegend, webMapId, mapView])
+
+    if (displayLegend) {
+      mapView.when(() => {
+        document
+          .getElementById("viewBottomRight")
+          .appendChild(document.createElement("div")).id = "legendWidget"
+
+        new Legend({
+          view: mapView,
+          container: "legendWidget",
+        })
+      })
+
+      setshowHideLegendText("Hide legend")
+    } else {
+      setshowHideLegendText("Show legend")
+    }
+  }, [displayLegend, tileLayerUrl, mapView])
 
   useEffect(() => {
-    // No, I don't need to create a new view
-    // I just need to remove, then add a layer
-    if (webMapId && !mapView) {
+    if (tileLayerUrl && !mapView) {
       //eslint-disable-next-line
-      let myView = createMapView(
-        mapRef.current,
-        webMapId,
-        previousMapViewProperties
-      )
+      let myView = createMapView(mapRef.current, previousMapViewProperties)
+
+      myMap = myView.map
+      let tileLayer = new TileLayer({
+        // URL points to a cached tiled map service hosted on ArcGIS Server
+        url: "https://tiles.arcgis.com/tiles/SEjlCWTAIsMEEXNx/arcgis/rest/services/Renta_neta_media_por_persona_2020/MapServer",
+      })
+      console.log(myMap)
+      myMap.add(tileLayer)
 
       // On focus over the view, close the layer-selection picklist
       myView.on("focus", () => {
@@ -118,22 +115,18 @@ const App = () => {
       })
 
       setMapView(myView)
-    } else if (webMapId && mapView) {
-      myMap = mapView.map
-
+    } else if (tileLayerUrl && mapView) {
       mapView.when(() => {
-        console.log("myMap:", myMap)
         // Only 1 layer per webmap
         myMap.layers.items.forEach((l) => console.log("Layer:", l))
         let layerToRemove = myMap.layers.items[0]
         myMap.remove(layerToRemove)
-        setTimeout(() => {
-          let tileLayer = new TileLayer({
-            // URL points to a cached tiled map service hosted on ArcGIS Server
-            url: "https://tiles.arcgis.com/tiles/SEjlCWTAIsMEEXNx/arcgis/rest/services/Renta_neta_media_por_persona_2020/MapServer",
-          })
-          myMap.add(tileLayer)
-        }, 3000)
+
+        let tileLayer = new TileLayer({
+          // URL points to a cached tiled map service hosted on ArcGIS Server
+          url: tileLayerUrl,
+        })
+        myMap.add(tileLayer)
       })
     }
 
@@ -149,7 +142,7 @@ const App = () => {
       // I don't need to destroy the view now
       //myView && myView.destroy()
     }
-  }, [webMapId, mapView])
+  }, [mapView, tileLayerUrl])
 
   return (
     <React.Fragment>
@@ -172,7 +165,7 @@ const App = () => {
         {displayLayerList && (
           <div className={classes.layerPicklist}>
             <Picklist
-              webmaps={webmaps}
+              mapItems={mapItems}
               onItemPicked={onListItemPicked}
               selectedLyrItemId={selectedLyrItemId}
             />
@@ -180,19 +173,20 @@ const App = () => {
         )}
       </div>
 
-      <div
-        id="viewBottomRight"
-        className={classes.viewBottomRight}
-        onClick={() => setDisplayLegend((prevValue) => !prevValue)}
-      >
-        <ButtonWithIcon
-          color="#fff"
-          text={showHideLegendText}
-          icon="legend"
-          iconSize="l"
-        />
-        {displayLegend && <div id="legendWidget"></div>}
-      </div>
+      {mapView && mapView.ui && (
+        <div
+          id="viewBottomRight"
+          className={classes.viewBottomRight}
+          onClick={() => setDisplayLegend((prevValue) => !prevValue)}
+        >
+          <ButtonWithIcon
+            color="#fff"
+            text={showHideLegendText}
+            icon="legend"
+            iconSize="l"
+          />
+        </div>
+      )}
     </React.Fragment>
   )
 }

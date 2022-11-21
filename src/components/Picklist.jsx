@@ -6,15 +6,13 @@ import PicklistItem from "./PicklistItem"
 
 import { CalcitePickList } from "@esri/calcite-components-react"
 
-const Picklist = ({ webmaps, onItemPicked, selectedLyrItemId }) => {
+const Picklist = ({ mapItems, onItemPicked, selectedLyrItemId }) => {
   return (
     <CalcitePickList>
-      {webmaps.map((i) => (
+      {mapItems.map((i) => (
         <PicklistItem
           key={i.sortOrder}
-          webmapId={i.id}
           label={i.label}
-          description={i.description}
           value={i.sortOrder}
           selected={i.sortOrder === selectedLyrItemId ? true : undefined} // Gotcha about false values becoming truthy: https://developers.arcgis.com/calcite-design-system/frameworks/
           icon="square" // circle, square or grip
