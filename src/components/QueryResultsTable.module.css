@@ -1,0 +1,45 @@
+.queryResultCtner {
+  position: absolute;
+  top: 10vh;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  width: 25vw;
+  min-width: 400px;
+  /* height: 90vh; */
+  background-color: white;
+  z-index: 1000;
+  border-left: solid 1px black;
+}
+
+.queryResultCtner li {
+  font-size: 15px;
+}
+
+.queryRow {
+  border-top: 1px black solid;
+}
+
+.queryRow:first-child .queryValue {
+  border-top: initial;
+  font-size: 20px;
+  font-weight: bold;
+  color: brown;
+}
+
+.queryName {
+  padding: 8px;
+  padding-bottom: 5px;
+  font-weight: bold;
+}
+
+.queryValue {
+  text-align: right;
+  padding: 6px;
+}
+
+@media only screen and (max-width: 640px) {
+  .queryResultCtner {
+    width: 100%;
+  }
+}

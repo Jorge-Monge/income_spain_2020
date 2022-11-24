@@ -1,0 +1,24 @@
+{
+  "url": "",
+  "description": "Even though the service URL seems to correspond only to the 'average income per person', in reality, the service returns data for all the other variables, like 'average income per household', 'Gini index', etc.",
+  "sublayers": [
+    {
+      "id": 1,
+      "name": "Nivel: Municipios",
+      "minScale": 10002000,
+      "maxScale": 1155580
+    },
+    {
+      "id": 2,
+      "name": "Nivel: Distritos",
+      "minScale": 1155580,
+      "maxScale": 288894
+    },
+    {
+      "id": 3,
+      "name": "Nivel: Secciones censales",
+      "minScale": 288894,
+      "maxScale": 0
+    }
+  ]
+}

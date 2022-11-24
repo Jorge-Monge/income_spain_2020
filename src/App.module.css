@@ -1,51 +1,84 @@
-.mapDiv {
-  height: 100vh;
-  width: 100vw;
+* {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
 }
 
-.viewTopRight,
-.viewBottomRight {
-  position: absolute;
+.upperBandCtner {
   display: flex;
-  align-items: flex-end;
-  right: 15px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: black;
+  height: 10vh;
+}
+
+.upperBandRight {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 15px;
+  /* color: white; */
+}
+
+.pageLogo {
+  min-width: 130px;
+}
+
+.pageTitle {
+  border-left: solid white 5px;
+  font-size: 25px;
+  font-stretch: condensed;
+  margin: 10px;
+  margin-left: 20px;
+  padding-left: 10px;
+  color: white;
+}
+
+.pageTools {
+  display: flex;
+  align-items: center;
+  align-content: flex-start;
+  gap: 10px;
+  padding: 10px;
+}
+
+.pageTools div {
   cursor: pointer;
 }
 
-.viewTopRight {
-  flex-direction: column;
-  top: 15px;
+.layerPicklistCtner {
+  background-color: aliceblue;
+  position: absolute;
+  top: 10vh;
+  z-index: 1000;
 }
 
-.viewBottomRight {
-  flex-direction: column-reverse;
-  row-gap: 15px;
-  bottom: 30px;
+.mapDiv {
+  height: 90vh;
+  width: 100vw;
 }
 
-.topBanner {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  max-width: 80vw;
-  padding: 2px;
-  background-color: black;
+.legendWidget {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  height: fit-content;
+  cursor: pointer;
 }
 
-.mapTitle {
-  font-size: 20px;
-  color: white;
-  padding: 8px;
+@media only screen and (max-width: 1280px) {
+  .pageTitle {
+    font-size: 18px;
+  }
+
+  .pageTools span {
+    display: none;
+  }
 }
 
-.layerPicklist {
-  margin-top: 15px;
-  border: solid black 2px;
-}
-
-@media only screen and (max-width: 600px) {
-  .mapTitle {
+@media only screen and (max-width: 640px) {
+  .pageTitle {
     font-size: 15px;
-    padding: 4px;
+    padding: 3px;
   }
 }

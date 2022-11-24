@@ -6,11 +6,17 @@ import PicklistItem from "./PicklistItem"
 
 import { CalcitePickList } from "@esri/calcite-components-react"
 
-const Picklist = ({ mapItems, onItemPicked, selectedLyrItemId }) => {
+const Picklist = ({
+  mapItems,
+  onItemPicked,
+  selectedLyrItemId,
+  classNameChildren,
+}) => {
   return (
     <CalcitePickList>
       {mapItems.map((i) => (
         <PicklistItem
+          className={classNameChildren}
           key={i.sortOrder}
           label={i.label}
           value={i.sortOrder}
