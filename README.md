@@ -1,4 +1,4 @@
-## A web app built with React and the ArcGIS JS API, and consuming from an ArcGIS tile server and map services.
+## A web app built with React and the ArcGIS JS API, consuming an ArcGIS tile server and REST map services.
 
 ---
 
@@ -37,7 +37,7 @@
 - #### Todo
 
   ☞ Implement English  
-  ☞ Highlight polygon when displaying info widget  
+  ☞ Highlight polygon when displaying info widget (start with returnGeometry=true)
   ☞ Add search widget  
   ☞ Highlight variable in the info widget  
   ☞ Implement debouncing for click events
