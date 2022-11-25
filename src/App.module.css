@@ -8,10 +8,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 10%;
+  height: 10vh;
   width: 100%;
   background-color: black;
-  border-bottom: white 1px solid;
+}
+
+.titleLogoCtner::before {
+  position: absolute;
+  content: "";
+  top: 10vh;
+  left: 0;
+  width: 200px;
+  height: 2px;
+  background-color: red;
+  z-index: 1500;
 }
 
 .pageTitleCtner {
