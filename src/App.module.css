@@ -4,53 +4,57 @@
   background-color: transparent;
 }
 
-.upperBandCtner {
+.titleLogoCtner {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: black;
+  padding: 0 0;
   height: 10vh;
+  background-color: black;
+  border-bottom: white 1px solid;
 }
 
-.upperBandRight {
+.pageTitleCtner {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  margin-right: 15px;
-  /* color: white; */
+  padding-left: 20px;
+}
+
+.pageTitle {
+  background-color: black;
+  color: white;
+  font-size: 25px;
+  font-stretch: condensed;
+}
+
+.logoCtner {
+  padding-right: 10px;
 }
 
 .pageLogo {
   min-width: 130px;
 }
 
-.pageTitle {
-  border-left: solid white 5px;
-  font-size: 25px;
-  font-stretch: condensed;
-  margin: 10px;
-  margin-left: 20px;
-  padding-left: 10px;
-  color: white;
-}
-
-.pageTools {
-  display: flex;
-  align-items: center;
-  align-content: flex-start;
-  gap: 10px;
-  padding: 10px;
-}
-
-.pageTools div {
-  cursor: pointer;
-}
-
-.layerPicklistCtner {
-  background-color: aliceblue;
+.toolsLayerPicklistCtner {
   position: absolute;
   top: 10vh;
-  z-index: 1000;
+  left: 0;
+}
+
+.toolsCtner {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+}
+
+.toolsCtner div {
+  cursor: pointer;
+  padding-right: 5px;
+  background-color: red;
+}
+
+.layerPicklist {
+  background-color: white;
 }
 
 .mapDiv {
@@ -66,19 +70,19 @@
   cursor: pointer;
 }
 
-@media only screen and (max-width: 1280px) {
+@media only screen and (max-width: 991px) {
   .pageTitle {
-    font-size: 18px;
-  }
-
-  .pageTools span {
-    display: none;
+    font-size: 16px;
   }
 }
 
 @media only screen and (max-width: 640px) {
+  .toolsCtner span {
+    display: none;
+  }
+
   .pageTitle {
-    font-size: 15px;
+    font-size: 14px;
     padding: 3px;
   }
 }

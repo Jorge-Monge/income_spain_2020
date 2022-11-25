@@ -59,7 +59,6 @@ const App = () => {
   const [queriedRecordInfo, setQueriedRecordInfo] = useState()
 
   const mapRef = useRef(null)
-  const upperBandCtnerRef = useRef()
 
   const onListItemPicked = (e) => {
     // Fires when an item is selected OR unselected
@@ -253,45 +252,48 @@ const App = () => {
 
   return (
     <React.Fragment>
-      <div className={classes.upperBandCtner} ref={upperBandCtnerRef}>
-        <div className={classes.pageTools}>
-          <ButtonWithIcon
-            onClick={() => setDisplayLayerList((prevValue) => !prevValue)}
-            className={classes.layersBtn}
-            color="#fff"
-            text="Capas"
-            icon="layers"
-            iconSize="l"
-          />
-
-          <ButtonWithIcon
-            onClick={() => setDisplayLegend((prevValue) => !prevValue)}
-            color="#fff"
-            text="Leyenda"
-            icon="legend"
-            iconSize="l"
-          />
-
+      <div className={classes.titleLogoCtner}>
+        <div className={classes.pageTitleCtner}>
           {mapTitle && <div className={classes.pageTitle}>{mapTitle}</div>}
         </div>
-
-        <div className={classes.upperBandRight}>
-          <JmLogo scale={0.15} color="white" className={classes.pageLogo} />
+        <div className={classes.logoCtner}>
+          <JmLogo scale={0.12} color="white" className={classes.pageLogo} />
         </div>
       </div>
 
-      {displayLayerList && (
-        <div className={classes.layerPicklistCtner}>
-          <Picklist
-            mapItems={mapItems}
-            classNameChildren={classes.layerPicklist}
-            onItemPicked={onListItemPicked}
-            selectedLyrItemId={selectedLyrItemId}
-          />
-        </div>
-      )}
-
       <div id={"mapDiv"} className={classes.mapDiv} ref={mapRef}>
+        (
+        <div className={classes.toolsLayerPicklistCtner}>
+          <div className={classes.toolsCtner}>
+            <ButtonWithIcon
+              onClick={() => setDisplayLayerList((prevValue) => !prevValue)}
+              className={classes.layersBtn}
+              color="#fff"
+              text="Capas"
+              icon="layers"
+              iconSize="l"
+              borderRadius="5px"
+            />
+
+            <ButtonWithIcon
+              onClick={() => setDisplayLegend((prevValue) => !prevValue)}
+              color="#fff"
+              text="Leyenda"
+              icon="legend"
+              iconSize="l"
+              borderRadius="5px"
+            />
+          </div>
+          {displayLayerList && (
+            <Picklist
+              className={classes.layerPicklist}
+              mapItems={mapItems}
+              classNameChildren={classes.layerPicklist}
+              onItemPicked={onListItemPicked}
+              selectedLyrItemId={selectedLyrItemId}
+            />
+          )}
+        </div>
         {queriedRecordInfo && (
           <QueryResultsTable
             data={queriedRecordInfo}

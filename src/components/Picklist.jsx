@@ -10,10 +10,11 @@ const Picklist = ({
   mapItems,
   onItemPicked,
   selectedLyrItemId,
+  className,
   classNameChildren,
 }) => {
   return (
-    <CalcitePickList>
+    <CalcitePickList className={className}>
       {mapItems.map((i) => (
         <PicklistItem
           className={classNameChildren}

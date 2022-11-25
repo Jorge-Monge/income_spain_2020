@@ -7,6 +7,7 @@ const ButtonWithIcon = ({
   icon,
   iconSize,
   className,
+  borderRadius,
   onClick,
 }) => {
   return (
@@ -15,12 +16,11 @@ const ButtonWithIcon = ({
       onClick={onClick}
       style={{
         width: "max-content",
-        padding: "5px",
         backgroundColor: color,
         display: "flex",
         justifyContent: "flex-end",
         alignItems: "center",
-        borderRadius: "5px",
+        borderRadius,
       }}
     >
       <span style={{ padding: "10px", fontWeight: "bold" }}>{text}</span>
