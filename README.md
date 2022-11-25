@@ -2,6 +2,8 @@
 
 ---
 
+![React badge](/assets/badges/React-20232A.svg "React") ![HTML5 badge](/assets/badges/HTML5-E34F26.svg "HTML5") ![CSS3 badge](/assets/badges/CSS3-1572B6.svg "CSS3") ![Javascript badge](/assets/badges/JavaScript-F7DF1E.svg "Javascript")
+
 ### Objectives
 
 - Display the different layers related with income information in Spain, 2020.
@@ -34,10 +36,10 @@
 
 - #### Todo
 
-  ☞ Implement English
-  ☞ Highlight polygon when displaying info widget
-  ☞ Add search widget
-  ☞ Highlight variable in the info widget
+  ☞ Implement English  
+  ☞ Highlight polygon when displaying info widget  
+  ☞ Add search widget  
+  ☞ Highlight variable in the info widget  
   ☞ Implement debouncing for click events
 
 - #### Notes
