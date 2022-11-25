@@ -37,6 +37,7 @@
 - #### Todo
 
   ☞ Implement English  
+  ☞ Use this method to get the first layer: var featureLayer = webmap.layers.getItemAt(0);  
   ☞ Highlight polygon when displaying info widget (start with returnGeometry=true)
   ☞ Add search widget  
   ☞ Highlight variable in the info widget  
