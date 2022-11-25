@@ -257,12 +257,13 @@ const App = () => {
           {mapTitle && <div className={classes.pageTitle}>{mapTitle}</div>}
         </div>
         <div className={classes.logoCtner}>
-          <JmLogo scale={0.12} color="white" className={classes.pageLogo} />
+          <a href="https://jorgemonge.ca">
+            <JmLogo scale={0.12} color="white" className={classes.pageLogo} />
+          </a>
         </div>
       </div>
 
       <div id={"mapDiv"} className={classes.mapDiv} ref={mapRef}>
-        (
         <div className={classes.toolsLayerPicklistCtner}>
           <div className={classes.toolsCtner}>
             <ButtonWithIcon
