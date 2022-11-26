@@ -3,6 +3,8 @@ import createMapView from "./utils/map"
 import TileLayer from "@arcgis/core/layers/TileLayer"
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer"
 import Legend from "@arcgis/core/widgets/Legend"
+import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
+import Graphic from "@arcgis/core/Graphic"
 //import Popup from "@arcgis/core/widgets/Popup"
 import Picklist from "./components/Picklist"
 import ButtonWithIcon from "./components/ButtonWithIcon"
@@ -21,7 +23,7 @@ let previousMapViewProperties = {
   zoom: 4,
 }
 
-let myMap
+let myMap, graphicsLayer
 
 // There is a series of attributes with names like "NOTA1", "NOTA2", ... "NOTA9"
 const fieldNotesAttribs = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => `NOTA${num}`)
@@ -51,7 +53,7 @@ const App = () => {
   const [mapTitle, setMapTitle] = useState(
     mapItems.filter((obj) => obj.sortOrder === 1)[0].label
   )
-  const [tileLayerUrl, setTileLayerUrl] = useState(process.env.REACT_APP_TLID1)
+  const [tileLayerUrl, setTileLayerUrl] = useState()
   const [selectedLyrItemId, setSelectedLyrItemId] = useState(1)
   const [displayLegend, setDisplayLegend] = useState(false)
   const [mapView, setMapView] = useState()
@@ -84,26 +86,46 @@ const App = () => {
   }
 
   const onRecordInfoWidgetClose = (e) => {
-    console.log("Closing record info widget...")
     setQueriedRecordInfo()
   }
 
+  // useEffect(() => {
+  //   /* When the mapView changes, remove the legend container if it exists */
+  //   if (mapView && mapView.ui) {
+  //     if (document.getElementById("legendWidget")) {
+  //       document.getElementById("legendWidget").remove()
+  //     }
+  //   }
+  // }, [mapView])
+
+  // Create the map view
   useEffect(() => {
-    /* When the mapView changes, remove the legend container if it exists */
-    if (mapView && mapView.ui) {
-      if (document.getElementById("legendWidget")) {
-        document.getElementById("legendWidget").remove()
-      }
-    }
-  }, [mapView])
+    //eslint-disable-next-line
+    let myView = createMapView(mapRef.current, previousMapViewProperties)
+
+    myView.ui.empty("top-left")
+
+    myMap = myView.map
+
+    // graphics layer for the markers which appear on click events
+    graphicsLayer = new GraphicsLayer({ title: "markers" })
+
+    myMap.add(graphicsLayer)
+
+    myView.when(() => {
+      myView.map.basemap.baseLayers.items.forEach((bl) => {
+        bl.popupEnabled = false
+        bl.sublayers.items.forEach((sl) => {
+          sl.popupEnabled = false
+        })
+      })
+
+      setMapView(myView)
+    })
+  }, [])
 
   useEffect(() => {
     /* Handle the showing and hiding of the Legend widget */
-
-    // If legend widget already created, remove its container beforehand
-    // if (document.getElementById("legendWidget")) {
-    //   document.getElementById("legendWidget").remove()
-    // }
 
     mapView &&
       mapView.when(() => {
@@ -122,6 +144,7 @@ const App = () => {
       })
   }, [displayLegend, tileLayerUrl, mapView])
 
+  // Add events to the map view, when it's ready
   useEffect(() => {
     /* When the View is ready, define its click event handler: query the appropriate feature service to retrieve the attributes */
 
@@ -131,6 +154,8 @@ const App = () => {
           // All feature services return all 9 data (but only for the given geographical unit: municipal, census districts, census sections, etc.)
           // Sublayer 1: municipal, 2: districts, 3: sections
           // Depending on the scale levels => choose a sublayer or the other
+
+          mapView.graphics.removeAll()
 
           const subLayer = featServiceInfo.sublayers.filter((sl) => {
             return sl.minScale > mapView.scale && mapView.scale >= sl.maxScale
@@ -171,12 +196,6 @@ const App = () => {
             outFields: [...spatQuerySkeleton.outFields, newField],
           }
 
-          console.log(
-            "scale, url, spatQuery",
-            mapView.scale,
-            featServiceUrl,
-            spatQuery
-          )
           featLayer
             .queryFeatures({ ...spatQuery, geometry: e.mapPoint })
             .then((results) => {
@@ -186,6 +205,29 @@ const App = () => {
               } else {
                 setQueriedRecordInfo()
               }
+
+              // Display a marker on the clicked position
+              const { x, y, spatialReference } = e.mapPoint
+              const geometry = {
+                type: "point",
+                x,
+                y,
+                spatialReference,
+              }
+
+              const symbol = {
+                type: "picture-marker", // autocasts as new PictureMarkerSymbol()
+                url: "https://i.ibb.co/cTFXSVN/icons8-place-marker-24.png",
+                width: "24px",
+                height: "24px",
+              }
+
+              let picMarkerGraphic = new Graphic({
+                symbol,
+                geometry,
+              })
+
+              mapView.graphics.add(picMarkerGraphic)
             })
             .catch((error) => {
               console.error(
@@ -193,51 +235,42 @@ const App = () => {
               )
             })
         })
+
+        // On focus over the view, close the layer-selection picklist
+        mapView.on("focus", () => {
+          setDisplayLayerList(false)
+        })
+
+        // On dragging over the view, close the layer-selection picklist
+        mapView.on("drag", () => {
+          setDisplayLayerList(false)
+        })
       })
     }
   }, [mapView])
 
+  /* At startup, add the initial tile layer. Then when a new layer is selected, remove the old layer and add the new to the map view */
   useEffect(() => {
-    /* Create the startup map view. Then, when a new layer is selected, remove the old layer and add the new to the map view */
+    if (mapView) {
+      let url
 
-    if (tileLayerUrl && !mapView) {
-      //eslint-disable-next-line
-      let myView = createMapView(mapRef.current, previousMapViewProperties)
+      if (!tileLayerUrl) {
+        url = process.env.REACT_APP_TLID1
+      } else {
+        // If switching the tile layer, remove the old tile layer first
+        url = tileLayerUrl
+        mapView.when(() => {
+          let layerToRemove = myMap.layers.items.filter(
+            (l) => l.title !== "markers"
+          )[0]
 
-      myView.ui.empty("top-left")
-
-      myMap = myView.map
-      let tileLayer = new TileLayer({
-        // URL points to a cached tiled map service hosted on ArcGIS Server
-        url: "https://tiles.arcgis.com/tiles/SEjlCWTAIsMEEXNx/arcgis/rest/services/Renta_neta_media_por_persona_2020/MapServer",
-      })
-
-      myMap.add(tileLayer)
-
-      // On focus over the view, close the layer-selection picklist
-      myView.on("focus", () => {
-        setDisplayLayerList(false)
-      })
-
-      // On dragging over the view, close the layer-selection picklist
-      myView.on("drag", () => {
-        setDisplayLayerList(false)
-      })
-
-      setMapView(myView)
-    } else if (tileLayerUrl && mapView) {
-      mapView.when(() => {
-        // Only 1 layer per webmap
-
-        let layerToRemove = myMap.layers.items[0]
-        myMap.remove(layerToRemove)
-
-        let tileLayer = new TileLayer({
-          // URL points to a cached tiled map service hosted on ArcGIS Server
-          url: tileLayerUrl,
+          myMap.remove(layerToRemove)
         })
-        myMap.add(tileLayer)
-      })
+      }
+
+      let tileLayer = new TileLayer({ url })
+      myMap.add(tileLayer)
+      tileLayer.opacity = 0.8
     }
 
     return () => {
@@ -248,7 +281,7 @@ const App = () => {
         }
       }
     }
-  }, [mapView, tileLayerUrl])
+  }, [mapView, tileLayerUrl]) //mapView,
 
   return (
     <React.Fragment>

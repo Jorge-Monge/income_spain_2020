@@ -36,12 +36,11 @@
 
 - #### Todo
 
-  ☞ Implement English  
-  ☞ Use this method to get the first layer: var featureLayer = webmap.layers.getItemAt(0);  
-  ☞ Highlight polygon when displaying info widget (start with returnGeometry=true)
-  ☞ Add search widget  
   ☞ Highlight variable in the info widget  
-  ☞ Implement debouncing for click events
+  ☞ Implement English  
+  ☞ Implement debouncing for click events  
+  ☞ Spinners both for the map and the info table  
+  ☞ Alerts about zooming in in order to query, plus the possibility of clicking on a different location without closing the info table
 
 - #### Notes
 

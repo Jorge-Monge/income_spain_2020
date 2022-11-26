@@ -32,7 +32,6 @@ const cleanSortObject = (dataObj) => {
 
   // Go from dictionaries having 'DATO1' as keys to others having 'Porcentaje de...' as keys
   let datoTypeFieldsRenamed = fieldNames.map((o, idx) => {
-    console.log("Index:", idx)
     let out
     for (const [k, v] of Object.entries(o)) {
       let actualValue = dataObj[k]
@@ -40,15 +39,12 @@ const cleanSortObject = (dataObj) => {
       if (!actualValue) {
         // i.e. an empty string
         actualValue = dataObj[`NOTA${k.slice(-1)}`]
-        console.log("Actual value:", actualValue)
       } else {
         // "DATO1", "DATO2", etc. contain some value. Then we need to append the units, depending on the attribute
         if ([0, 1].includes(idx)) {
           actualValue = `${actualValue} €`
-          console.log("Actual value:", actualValue)
         } else if ([2, 3, 4, 5, 6, 7].includes(idx)) {
           actualValue = `${actualValue} %`
-          console.log("Actual value:", actualValue)
         }
       }
 
@@ -72,7 +68,6 @@ const cleanSortObject = (dataObj) => {
 
 const QueryResultsTable = ({ data, onClose }) => {
   const cleanSortedDataArray = cleanSortObject(data)
-  console.log(cleanSortedDataArray)
 
   const items = cleanSortedDataArray.map(([name, value], idx) => {
     return (
