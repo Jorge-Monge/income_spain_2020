@@ -21,7 +21,6 @@ const JmLogo = ({ scale, color, className }) => {
             width={width}
             xmlns="http://www.w3.org/2000/svg"
           >
-            <defs></defs>
             <g
               id="tight-bounds"
               transform="matrix(1,0,0,1,0.2400000000000091,-0.09999999999999432)"

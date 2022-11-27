@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect, useCallback } from "react"
 import createMapView from "./utils/map"
 import TileLayer from "@arcgis/core/layers/TileLayer"
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer"
@@ -23,7 +23,15 @@ let previousMapViewProperties = {
   zoom: 4,
 }
 
-let myMap, graphicsLayer
+// Marker which is inserted when user clicks on a location
+const symbol = {
+  type: "picture-marker", // autocasts as new PictureMarkerSymbol()
+  url: "https://i.ibb.co/cTFXSVN/icons8-place-marker-24.png",
+  width: "24px",
+  height: "24px",
+}
+
+let myMap, graphicsLayer, attribBeingMapped
 
 // There is a series of attributes with names like "NOTA1", "NOTA2", ... "NOTA9"
 const fieldNotesAttribs = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => `NOTA${num}`)
@@ -47,6 +55,52 @@ const spatQuerySkeleton = {
   returnGeometry: false,
 }
 
+const obtainMapVariableFromLayer = (layerTitle) => {
+  /* This function gets a layer title, and returns the attribute being mapped */
+
+  let returnValue
+
+  // ATTENTION
+  // Match these attributes with the final ones in QueryResultsTable
+  switch (layerTitle) {
+    case "Renta neta media por persona 2020":
+      returnValue = "Renta neta media por persona"
+      break
+    case "Renta neta media por hogar 2020":
+      returnValue = "Renta neta media por hogar"
+      break
+    case "Porcentaje de población con ingresos por unidad de consumo por debajo del 7500 2020":
+      returnValue =
+        "Poblacion con ingresos por unidad de consumo por debajo de 7.500 Euros"
+      break
+    case "Porcentaje de población con ingresos por unidad consumo menor del 60 de la mediana 2020":
+      returnValue =
+        "Poblacion con ingresos por unidad de consumo por debajo del 60% de la mediana"
+      break
+    case "Por de población con ingresos por unidad de consumo mayor del 200 de la mediana 2020":
+      returnValue =
+        "Poblacion con ingresos por unidad de consumo por encima del 200% de la mediana"
+      break
+    case "Por de pob menor 18 años ingresos por unidad de consumo menor del 60 de la mediana 2020":
+      returnValue =
+        "Poblacion menor de 18 años con ingresos por unidad de consumo por debajo del 60% de la mediana"
+      break
+    case "Porcentaje de población menor de 18 años 2020":
+      returnValue = "Poblacion menor de 18 años"
+      break
+    case "Porcentaje de población mayor de 65 años 2020":
+      returnValue = "Poblacion de 65 y más años"
+      break
+    case "Índice de Gini 2020":
+      returnValue = "Índice de Gini"
+      break
+    default:
+      returnValue = ""
+  }
+
+  return returnValue
+}
+
 const App = () => {
   // startup map title taken from the JSON data's first element
 
@@ -59,6 +113,7 @@ const App = () => {
   const [mapView, setMapView] = useState()
   const [displayLayerList, setDisplayLayerList] = useState(false)
   const [queriedRecordInfo, setQueriedRecordInfo] = useState()
+  const [openRecordInfoWidget, setOpenRecordInfoWidget] = useState()
 
   const mapRef = useRef(null)
 
@@ -66,6 +121,8 @@ const App = () => {
     // Fires when an item is selected OR unselected
     // It does NOT fire for clicks on the currently selected item
     e.preventDefault()
+
+    onRecordInfoWidgetClose()
 
     // Change the tile layer in accordance with the item selected in the pick list
     if (e.detail.selected) {
@@ -85,18 +142,14 @@ const App = () => {
     setDisplayLayerList(false)
   }
 
-  const onRecordInfoWidgetClose = (e) => {
-    setQueriedRecordInfo()
-  }
+  const clearGraphicsFromView = useCallback(() => {
+    mapView.graphics.removeAll()
+  }, [mapView])
 
-  // useEffect(() => {
-  //   /* When the mapView changes, remove the legend container if it exists */
-  //   if (mapView && mapView.ui) {
-  //     if (document.getElementById("legendWidget")) {
-  //       document.getElementById("legendWidget").remove()
-  //     }
-  //   }
-  // }, [mapView])
+  const onRecordInfoWidgetClose = (e) => {
+    setOpenRecordInfoWidget(false)
+    clearGraphicsFromView()
+  }
 
   // Create the map view
   useEffect(() => {
@@ -155,7 +208,24 @@ const App = () => {
           // Sublayer 1: municipal, 2: districts, 3: sections
           // Depending on the scale levels => choose a sublayer or the other
 
-          mapView.graphics.removeAll()
+          clearGraphicsFromView()
+          setQueriedRecordInfo()
+
+          // DISPLAY A MARKER on the clicked position
+          const { x, y, spatialReference } = e.mapPoint
+          const geometry = {
+            type: "point",
+            x,
+            y,
+            spatialReference,
+          }
+
+          let picMarkerGraphic = new Graphic({
+            symbol,
+            geometry,
+          })
+
+          mapView.graphics.add(picMarkerGraphic)
 
           const subLayer = featServiceInfo.sublayers.filter((sl) => {
             return sl.minScale > mapView.scale && mapView.scale >= sl.maxScale
@@ -168,6 +238,9 @@ const App = () => {
             )
             return
           }
+
+          // Open the record info widget, even if blank at the moment
+          setOpenRecordInfoWidget(true)
 
           const featServiceUrl = process.env.REACT_APP_QUERY_FEAT_SERVICE
           let featLayer = new FeatureLayer({
@@ -201,38 +274,25 @@ const App = () => {
             .then((results) => {
               // Send the result to the state, be it for an area that returned data or for an area for which the result was void
               if (results.features.length) {
-                setQueriedRecordInfo(results.features[0].attributes)
+                // Enrich the returned data with info about which attribute is the one appearing in the choropleth map
+                let queryResultsObj = results.features[0].attributes
+
+                setQueriedRecordInfo({
+                  results: queryResultsObj,
+                  attribBeingMapped,
+                })
               } else {
-                setQueriedRecordInfo()
+                setQueriedRecordInfo({
+                  NODATA:
+                    "Ubicación sin datos disponibles. Por favor seleccione otra.",
+                })
               }
-
-              // Display a marker on the clicked position
-              const { x, y, spatialReference } = e.mapPoint
-              const geometry = {
-                type: "point",
-                x,
-                y,
-                spatialReference,
-              }
-
-              const symbol = {
-                type: "picture-marker", // autocasts as new PictureMarkerSymbol()
-                url: "https://i.ibb.co/cTFXSVN/icons8-place-marker-24.png",
-                width: "24px",
-                height: "24px",
-              }
-
-              let picMarkerGraphic = new Graphic({
-                symbol,
-                geometry,
-              })
-
-              mapView.graphics.add(picMarkerGraphic)
             })
             .catch((error) => {
-              console.error(
-                "ERROR: Issue when fetching data from feature service. Please refresh the page."
-              )
+              setQueriedRecordInfo({
+                ERROR:
+                  "Error al obtener datos del Instituto Nacional de Estadística. Por favor refresque la página del navegador pulsando la tecla 'F5'",
+              })
             })
         })
 
@@ -247,7 +307,7 @@ const App = () => {
         })
       })
     }
-  }, [mapView])
+  }, [mapView, clearGraphicsFromView])
 
   /* At startup, add the initial tile layer. Then when a new layer is selected, remove the old layer and add the new to the map view */
   useEffect(() => {
@@ -268,9 +328,21 @@ const App = () => {
         })
       }
 
-      let tileLayer = new TileLayer({ url })
-      myMap.add(tileLayer)
-      tileLayer.opacity = 0.8
+      // Add the tile layer
+      mapView.when(() => {
+        let tileLayer = new TileLayer({ url })
+        myMap.add(tileLayer)
+        tileLayer.opacity = 0.8
+
+        // Send an array of attribute-identifying keywords to the 'attribBeingMapped' variable
+        mapView.whenLayerView(tileLayer).then(() => {
+          let tileLayerTitle = mapView.layerViews.items.find(
+            (lv) => lv.layer.title !== "markers"
+          ).layer.title
+
+          attribBeingMapped = obtainMapVariableFromLayer(tileLayerTitle)
+        })
+      })
     }
 
     return () => {
@@ -281,7 +353,7 @@ const App = () => {
         }
       }
     }
-  }, [mapView, tileLayerUrl]) //mapView,
+  }, [mapView, tileLayerUrl])
 
   return (
     <React.Fragment>
@@ -328,7 +400,7 @@ const App = () => {
             />
           )}
         </div>
-        {queriedRecordInfo && (
+        {openRecordInfoWidget && (
           <QueryResultsTable
             data={queriedRecordInfo}
             onClose={onRecordInfoWidgetClose}

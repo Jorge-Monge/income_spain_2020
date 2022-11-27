@@ -36,10 +36,9 @@
 
 - #### Todo
 
-  ☞ Highlight variable in the info widget  
+  ☞ Change cursor tipe when layer can be queried at that zoom level  
   ☞ Implement English  
   ☞ Implement debouncing for click events  
-  ☞ Spinners both for the map and the info table  
   ☞ Alerts about zooming in in order to query, plus the possibility of clicking on a different location without closing the info table
 
 - #### Notes
