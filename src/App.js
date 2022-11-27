@@ -176,7 +176,7 @@ const App = () => {
       })
 
       toast.info(
-        "Una vez amplíe el map ligeramente, puede pulsar en un área y obtener información detallada sobre ella",
+        "Una vez amplíe el mapa ligeramente, puede pulsar en un área y obtener información detallada sobre ella",
         {
           theme: "light",
           icon: "ℹ️",
