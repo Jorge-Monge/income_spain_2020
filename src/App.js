@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import createMapView from "./utils/map"
 import TileLayer from "@arcgis/core/layers/TileLayer"
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer"
@@ -204,6 +206,19 @@ const App = () => {
     if (mapView) {
       mapView.when(() => {
         mapView.on("click", (e) => {
+          // Is the zoom level enough to query a feature service? If not, show a notification
+          console.log(mapView.scale)
+          toast.error(
+            "Para poder obtener información detallada de una zona, necesita ampliar más el mapa",
+            {
+              theme: "dark",
+              icon: "✋",
+              autoClose: 5000,
+              type: "error",
+              toastId: "out of scale toast",
+            }
+          )
+
           // All feature services return all 9 data (but only for the given geographical unit: municipal, census districts, census sections, etc.)
           // Sublayer 1: municipal, 2: districts, 3: sections
           // Depending on the scale levels => choose a sublayer or the other
@@ -233,6 +248,8 @@ const App = () => {
 
           if (!subLayer) {
             // Click when zoomed out too much
+            // ATTENTION
+            // Implement toastify
             console.error(
               "ERROR: Unable to determine feature service sub-layer"
             )
@@ -400,6 +417,7 @@ const App = () => {
             />
           )}
         </div>
+        <ToastContainer />
         {openRecordInfoWidget && (
           <QueryResultsTable
             data={queriedRecordInfo}

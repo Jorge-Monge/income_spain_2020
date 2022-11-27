@@ -2,6 +2,14 @@
   padding: 0;
   margin: 0;
   background-color: transparent;
+
+  /* TOASTIFY */
+  --toastify-toast-width: 600px;
+}
+
+/* TOASTIFY */
+.Toastify__toast-container--top-right {
+  top: 300px;
 }
 
 .titleLogoCtner {
