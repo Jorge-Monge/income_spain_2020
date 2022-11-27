@@ -9,11 +9,10 @@
   overflow: auto;
   width: 25vw;
   min-width: 400px;
-  /* height: 90vh; */
+  height: 90vh;
   background-color: white;
   z-index: 1000;
   border-left: solid 1px black;
-  overflow: visible;
 }
 
 .queryResultCtner::before {
@@ -26,9 +25,17 @@
   background-color: red;
 }
 
-.queryResultInnerCtner {
-  padding: 5px;
-  padding-left: 10px;
+.queryResultInnerCtnerLogo {
+  padding: 10px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.queryResultInnerCtnerData {
+  padding: 10px;
+  height: 100%;
 }
 
 .pageLogo {

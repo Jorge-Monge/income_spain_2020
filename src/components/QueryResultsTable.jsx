@@ -137,10 +137,12 @@ const QueryResultsTable = ({ data, onClose }) => {
 
   return (
     <div className={classes.queryResultCtner}>
-      <div className={classes.queryResultInnerCtner}>
+      <div className={classes.queryResultInnerCtnerLogo}>
         {!data && (
           <JmLogo scale={0.12} color="black" className={classes.pageLogo} />
         )}
+      </div>
+      <div className={classes.queryResultInnerCtnerData}>
         {data && (
           <ul>
             {items}
