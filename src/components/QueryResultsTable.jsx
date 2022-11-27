@@ -121,12 +121,11 @@ const QueryResultsTable = ({ data, onClose }) => {
     )
 
     items = flaggedDataArray.map(([name, value, flag], idx) => {
-      console.log("flag:", flag)
       let rowClassName =
         flag === true
           ? `${classes.queryRow} ${classes.selected}`
           : classes.queryRow
-      console.log(rowClassName)
+
       return (
         <li key={idx} className={rowClassName}>
           <div className={classes.queryName}>{name}</div>
@@ -138,20 +137,22 @@ const QueryResultsTable = ({ data, onClose }) => {
 
   return (
     <div className={classes.queryResultCtner}>
-      {!data && (
-        <JmLogo scale={0.12} color="black" className={classes.pageLogo} />
-      )}
-      {data && (
-        <ul>
-          {items}
-          <CalciteIcon
-            className={classes.closeWidgetIcon}
-            icon={"x-circle"}
-            scale={"m"}
-            onClick={onClose}
-          />
-        </ul>
-      )}
+      <div className={classes.queryResultInnerCtner}>
+        {!data && (
+          <JmLogo scale={0.12} color="black" className={classes.pageLogo} />
+        )}
+        {data && (
+          <ul>
+            {items}
+            <CalciteIcon
+              className={classes.closeWidgetIcon}
+              icon={"x-circle"}
+              scale={"m"}
+              onClick={onClose}
+            />
+          </ul>
+        )}
+      </div>
     </div>
   )
 }

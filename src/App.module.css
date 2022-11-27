@@ -8,8 +8,8 @@
 }
 
 /* TOASTIFY */
-.Toastify__toast-container--top-right {
-  top: 300px;
+.toastifyTopRight {
+  top: 11vh;
 }
 
 .titleLogoCtner {

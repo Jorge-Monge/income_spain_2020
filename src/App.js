@@ -22,7 +22,7 @@ import classes from "./App.module.css"
 
 let previousMapViewProperties = {
   center: [-3, 39],
-  zoom: 4,
+  zoom: 5,
 }
 
 // Marker which is inserted when user clicks on a location
@@ -175,6 +175,17 @@ const App = () => {
         })
       })
 
+      toast.info(
+        "Una vez amplíe el map ligeramente, puede pulsar en un área y obtener información detallada sobre ella",
+        {
+          theme: "light",
+          icon: "ℹ️",
+          autoClose: 5000,
+          type: "info",
+          toastId: "info upon first rendering",
+        }
+      )
+
       setMapView(myView)
     })
   }, [])
@@ -206,111 +217,115 @@ const App = () => {
     if (mapView) {
       mapView.when(() => {
         mapView.on("click", (e) => {
+          // TOASTIFY WARNING
           // Is the zoom level enough to query a feature service? If not, show a notification
-          console.log(mapView.scale)
-          toast.error(
-            "Para poder obtener información detallada de una zona, necesita ampliar más el mapa",
-            {
-              theme: "dark",
-              icon: "✋",
-              autoClose: 5000,
-              type: "error",
-              toastId: "out of scale toast",
-            }
-          )
 
-          // All feature services return all 9 data (but only for the given geographical unit: municipal, census districts, census sections, etc.)
-          // Sublayer 1: municipal, 2: districts, 3: sections
-          // Depending on the scale levels => choose a sublayer or the other
-
-          clearGraphicsFromView()
-          setQueriedRecordInfo()
-
-          // DISPLAY A MARKER on the clicked position
-          const { x, y, spatialReference } = e.mapPoint
-          const geometry = {
-            type: "point",
-            x,
-            y,
-            spatialReference,
-          }
-
-          let picMarkerGraphic = new Graphic({
-            symbol,
-            geometry,
-          })
-
-          mapView.graphics.add(picMarkerGraphic)
-
-          const subLayer = featServiceInfo.sublayers.filter((sl) => {
-            return sl.minScale > mapView.scale && mapView.scale >= sl.maxScale
-          })[0]
-
-          if (!subLayer) {
-            // Click when zoomed out too much
-            // ATTENTION
-            // Implement toastify
-            console.error(
-              "ERROR: Unable to determine feature service sub-layer"
-            )
-            return
-          }
-
-          // Open the record info widget, even if blank at the moment
-          setOpenRecordInfoWidget(true)
-
-          const featServiceUrl = process.env.REACT_APP_QUERY_FEAT_SERVICE
-          let featLayer = new FeatureLayer({
-            url: `${featServiceUrl}${subLayer.id}`,
-          })
-
-          // Slightly modify the query out fields depending on the selected feature service
-          let newField = ""
-          switch (subLayer.id) {
-            case 1:
-              newField = "Nivel"
-              break
-            case 2:
-              newField = "Nivel1"
-              break
-            case 3:
-              newField = "Nivel2"
-              break
-            default:
-              newField = ""
-          }
-
-          // Starting with the basic spatial query, 'spatQuerySkeleton', add 1 field (named either 'Nivel', or 'Nivel1', or 'Nivel2')
-          let spatQuery = {
-            ...spatQuerySkeleton,
-            outFields: [...spatQuerySkeleton.outFields, newField],
-          }
-
-          featLayer
-            .queryFeatures({ ...spatQuery, geometry: e.mapPoint })
-            .then((results) => {
-              // Send the result to the state, be it for an area that returned data or for an area for which the result was void
-              if (results.features.length) {
-                // Enrich the returned data with info about which attribute is the one appearing in the choropleth map
-                let queryResultsObj = results.features[0].attributes
-
-                setQueriedRecordInfo({
-                  results: queryResultsObj,
-                  attribBeingMapped,
-                })
-              } else {
-                setQueriedRecordInfo({
-                  NODATA:
-                    "Ubicación sin datos disponibles. Por favor seleccione otra.",
-                })
+          if (mapView.scale > 18489200) {
+            toast.error(
+              "Para poder obtener información detallada de una zona, necesita ampliar más el mapa",
+              {
+                theme: "light",
+                icon: "✋",
+                autoClose: 5000,
+                type: "error",
+                toastId: "out of scale toast",
               }
+            )
+          } else {
+            // View scale is right to proceed
+            // All feature services return all 9 data (but only for the given geographical unit: municipal, census districts, census sections, etc.)
+            // Sublayer 1: municipal, 2: districts, 3: sections
+            // Depending on the scale levels => choose a sublayer or the other
+
+            clearGraphicsFromView()
+            setQueriedRecordInfo()
+
+            // DISPLAY A MARKER on the clicked position
+            const { x, y, spatialReference } = e.mapPoint
+            const geometry = {
+              type: "point",
+              x,
+              y,
+              spatialReference,
+            }
+
+            let picMarkerGraphic = new Graphic({
+              symbol,
+              geometry,
             })
-            .catch((error) => {
-              setQueriedRecordInfo({
-                ERROR:
-                  "Error al obtener datos del Instituto Nacional de Estadística. Por favor refresque la página del navegador pulsando la tecla 'F5'",
+
+            mapView.graphics.add(picMarkerGraphic)
+
+            const subLayer = featServiceInfo.sublayers.filter((sl) => {
+              return sl.minScale > mapView.scale && mapView.scale >= sl.maxScale
+            })[0]
+
+            if (!subLayer) {
+              // Click when zoomed out too much
+              // ATTENTION
+              // Implement toastify
+              console.error(
+                "ERROR: Unable to determine feature service sub-layer"
+              )
+              return
+            }
+
+            // Open the record info widget, even if blank at the moment
+            setOpenRecordInfoWidget(true)
+
+            const featServiceUrl = process.env.REACT_APP_QUERY_FEAT_SERVICE
+            let featLayer = new FeatureLayer({
+              url: `${featServiceUrl}${subLayer.id}`,
+            })
+
+            // Slightly modify the query out fields depending on the selected feature service
+            let newField = ""
+            switch (subLayer.id) {
+              case 1:
+                newField = "Nivel"
+                break
+              case 2:
+                newField = "Nivel1"
+                break
+              case 3:
+                newField = "Nivel2"
+                break
+              default:
+                newField = ""
+            }
+
+            // Starting with the basic spatial query, 'spatQuerySkeleton', add 1 field (named either 'Nivel', or 'Nivel1', or 'Nivel2')
+            let spatQuery = {
+              ...spatQuerySkeleton,
+              outFields: [...spatQuerySkeleton.outFields, newField],
+            }
+
+            featLayer
+              .queryFeatures({ ...spatQuery, geometry: e.mapPoint })
+              .then((results) => {
+                // Send the result to the state, be it for an area that returned data or for an area for which the result was void
+                if (results.features.length) {
+                  // Enrich the returned data with info about which attribute is the one appearing in the choropleth map
+                  let queryResultsObj = results.features[0].attributes
+
+                  setQueriedRecordInfo({
+                    results: queryResultsObj,
+                    attribBeingMapped,
+                  })
+                } else {
+                  setQueriedRecordInfo({
+                    NODATA:
+                      "Ubicación sin datos disponibles. Por favor seleccione otra.",
+                  })
+                }
               })
-            })
+              .catch((error) => {
+                setQueriedRecordInfo({
+                  ERROR:
+                    "Error al obtener datos del Instituto Nacional de Estadística. Por favor refresque la página del navegador pulsando la tecla 'F5'",
+                })
+              })
+          }
         })
 
         // On focus over the view, close the layer-selection picklist
@@ -417,7 +432,7 @@ const App = () => {
             />
           )}
         </div>
-        <ToastContainer />
+        <ToastContainer className={classes.toastifyTopRight} />
         {openRecordInfoWidget && (
           <QueryResultsTable
             data={queriedRecordInfo}

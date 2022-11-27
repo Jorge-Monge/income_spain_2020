@@ -40,10 +40,9 @@
 
 - #### Todo
 
-  ☞ Change cursor tipe when layer can be queried at that zoom level  
   ☞ Implement English  
   ☞ Implement debouncing for click events  
-  ☞ Alerts about zooming in in order to query, plus the possibility of clicking on a different location without closing the info table  
+  ☞ Alerts about the possibility of clicking on a different location without closing the info table  
   ☞ Animate the red little border while waiting for the map to appear, or the info widget to display info
 
 - #### Notes
