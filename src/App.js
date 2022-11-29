@@ -12,6 +12,7 @@ import Picklist from "./components/Picklist"
 import ButtonWithIcon from "./components/ButtonWithIcon"
 import JmLogo from "./components/JmLogo"
 import QueryResultsTable from "./components/QueryResultsTable"
+import Modal from "./components/Modal"
 
 //import BasemapToggle from "@arcgis/core/widgets/BasemapToggle"
 
@@ -19,6 +20,7 @@ import mapItems from "./data/mapItems.json"
 import featServiceInfo from "./data/featService.json"
 
 import classes from "./App.module.css"
+import { CalciteIcon } from "@esri/calcite-components-react"
 
 let previousMapViewProperties = {
   center: [-3, 39],
@@ -116,6 +118,7 @@ const App = () => {
   const [displayLayerList, setDisplayLayerList] = useState(false)
   const [queriedRecordInfo, setQueriedRecordInfo] = useState()
   const [openRecordInfoWidget, setOpenRecordInfoWidget] = useState()
+  const [showModal, setShowModal] = useState(false)
 
   const mapRef = useRef(null)
 
@@ -391,6 +394,15 @@ const App = () => {
     <React.Fragment>
       <div className={classes.titleLogoCtner}>
         <div className={classes.pageTitleCtner}>
+          <div className={classes.infoIcon}>
+            <CalciteIcon
+              onClick={() => setShowModal((oldValue) => !oldValue)}
+              className={classes.infoBtn}
+              color="#fff"
+              icon="information"
+              iconSize="l"
+            />
+          </div>
           {mapTitle && <div className={classes.pageTitle}>{mapTitle}</div>}
         </div>
         <div className={classes.logoCtner}>
@@ -440,6 +452,7 @@ const App = () => {
           />
         )}
       </div>
+      {showModal && <Modal onClose={() => setShowModal(false)} />}
     </React.Fragment>
   )
 }
