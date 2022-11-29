@@ -4,7 +4,7 @@ import { CalciteIcon } from "@esri/calcite-components-react"
 import classes from "./Modal.module.css"
 
 const text = (
-  <div>
+  <div className={classes.textCtner}>
     <section>
       Applicación web que permite visualizar sobre un mapa de España variables
       relacionadas con el "Atlas de distribución de renta. 2020" del{" "}
@@ -27,9 +27,11 @@ const text = (
       por el INE, y ha sido realizada con React y la API de Javascript de Esri.
     </section>
     <br />
-    <span>Jorge Monge</span>
-    <br />
-    <span>gis@jorgemonge.ca</span>
+    <section>
+      <span>Jorge Monge</span>
+      <br />
+      <span>gis@jorgemonge.ca</span>
+    </section>
   </div>
 )
 
