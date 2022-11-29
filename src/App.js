@@ -35,7 +35,9 @@ const symbol = {
   height: "24px",
 }
 
-let myMap, graphicsLayer, attribBeingMapped
+let myMap
+let graphicsLayer
+let attribBeingMapped
 
 // There is a series of attributes with names like "NOTA1", "NOTA2", ... "NOTA9"
 const fieldNotesAttribs = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => `NOTA${num}`)
