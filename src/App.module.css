@@ -76,9 +76,7 @@
 }
 
 .toolsCtner div {
-  cursor: pointer;
-  padding-right: 5px;
-  background-color: red;
+  padding: 8px;
 }
 
 .layerPicklist {

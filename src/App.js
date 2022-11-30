@@ -352,9 +352,10 @@ const App = () => {
       let url
 
       if (!tileLayerUrl) {
+        // on startup...
         url = process.env.REACT_APP_TLID1
       } else {
-        // If switching the tile layer, remove the old tile layer first
+        // on switching tile layer...remove the old tile layer first
         url = tileLayerUrl
         mapView.when(() => {
           let layerToRemove = myMap.layers.items.filter(
@@ -429,6 +430,7 @@ const App = () => {
 
             <ButtonWithIcon
               onClick={() => setDisplayLegend((prevValue) => !prevValue)}
+              className={classes.legendBtn}
               color="#fff"
               text="Leyenda"
               icon="legend"

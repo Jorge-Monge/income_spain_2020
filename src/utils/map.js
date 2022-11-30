@@ -11,7 +11,7 @@ const basemap = new Basemap({
 
 const createMapView = (viewContainer, previousMapViewProperties) => {
   const map = new WebMap({
-    basemap, //basemap: process.env.REACT_APP_BASEMAP,
+    basemap,
   })
 
   return new MapView({
