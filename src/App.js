@@ -89,8 +89,6 @@ try {
   startupLanguage = "en"
 }
 
-startupLanguage = "es"
-
 const App = () => {
   const [lang, setLang] = useState(startupLanguage)
   // startup map title taken from the JSON data's first element
