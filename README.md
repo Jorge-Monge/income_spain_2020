@@ -40,10 +40,10 @@
 
 - #### Todo
 
-  ☞ Implement English  
+  ☞ In the legend, create a single object with the sublayer names in EN and ES  
   ☞ Implement debouncing for click events  
   ☞ Alerts about the possibility of clicking on a different location without closing the info table  
-  ☞ Animate the red little border while waiting for the map to appear, or the info widget to display info
+  ☞ Show an info icon by the cursor when hovering over a queryable area
 
 - #### Notes
 

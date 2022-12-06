@@ -3,7 +3,7 @@ import { CalciteIcon } from "@esri/calcite-components-react"
 
 import classes from "./Modal.module.css"
 
-const text = (
+const text_ES = (
   <div className={classes.textCtner}>
     <section>
       Applicación web que permite visualizar sobre un mapa de España variables
@@ -35,11 +35,42 @@ const text = (
   </div>
 )
 
-const Modal = ({ onClose }) => {
+const text_EN = (
+  <div className={classes.textCtner}>
+    <section>
+      Web application mapping some age and income variables in Spain in 2020, as
+      provided by the{" "}
+      <a href="https://www.ine.es/">Spanish Institute of Statistics (INE)</a>.
+    </section>
+    <section>
+      As per a news note distributed by the Institute, "The Atlas of the
+      Household Income 2020" provides information on income levels per person
+      and per household, as well as their geographical characteristics. This
+      information is complemented with some demographic indicators. It has been
+      built with data coming from the Spanish Revenue Agency (AEAT) and others.
+      Income data is allocated to the location of residence, and the
+      geographical units are municipalities, districts, and census sections.
+    </section>
+    <section>
+      This web application consumes tile and REST services published by the
+      Spanish Institute of Statistics (INE), and has been built with React and
+      the ArcGIS Javascript API. Esta aplicación consume servicios de teselas y
+      servicios RESP publicados
+    </section>
+    <br />
+    <section>
+      <span>Jorge Monge</span>
+      <br />
+      <span>gis@jorgemonge.ca</span>
+    </section>
+  </div>
+)
+
+const Modal = ({ onClose, language }) => {
   return (
     <div className={classes.modalCtner}>
       <div className={classes.innerModalCtner}>
-        {text}
+        {language === "es" ? text_ES : text_EN}
         <CalciteIcon
           className={classes.closeWidgetIcon}
           icon={"x-circle"}

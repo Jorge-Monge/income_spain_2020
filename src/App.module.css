@@ -88,11 +88,8 @@
   width: 100%;
 }
 
-.legendWidget {
-  position: absolute;
-  right: 15px;
-  bottom: 15px;
-  height: fit-content;
+.layersBtn,
+.legendBtn {
   cursor: pointer;
 }
 

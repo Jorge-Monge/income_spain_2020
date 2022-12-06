@@ -12,14 +12,16 @@ const Picklist = ({
   selectedLyrItemId,
   className,
   classNameChildren,
+  language,
 }) => {
+  const labelLangDependant = language === "es" ? "label" : "label_en"
   return (
     <CalcitePickList className={className}>
       {mapItems.map((i) => (
         <PicklistItem
           className={classNameChildren}
           key={i.sortOrder}
-          label={i.label}
+          label={i[labelLangDependant]}
           value={i.sortOrder}
           selected={i.sortOrder === selectedLyrItemId ? true : undefined} // Gotcha about false values becoming truthy: https://developers.arcgis.com/calcite-design-system/frameworks/
           icon="square" // circle, square or grip

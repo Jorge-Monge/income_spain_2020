@@ -1,38 +1,65 @@
 [
   {
     "sortOrder": 1,
-    "label": "Renta media por persona"
+    "layer_title": "Renta neta media por persona 2020",
+    "label": "Renta media por persona",
+    "label_en": "Average income per person",
+    "attribute": "Renta neta media por persona"
   },
   {
     "sortOrder": 2,
-    "label": "Renta media por hogar"
+    "layer_title": "Renta neta media por hogar 2020",
+    "label": "Renta media por hogar",
+    "label_en": "Average income per household",
+    "attribute": "Renta neta media por hogar"
   },
   {
     "sortOrder": 3,
-    "label": "Población con ingresos por unidad de consumo menor de 7.500 euros"
+    "layer_title": "Porcentaje de población con ingresos por unidad de consumo por debajo del 7500 2020",
+    "label": "Población con ingresos por unidad de consumo menor de 7.500 euros",
+    "label_en": "Population (%) with income per consumption unit less than 7500 €",
+    "attribute": "Poblacion con ingresos por unidad de consumo por debajo de 7.500 Euros"
   },
   {
     "sortOrder": 4,
-    "label": "Población con ingresos por unidad de consumo menor al 60% de la mediana"
+    "layer_title": "Porcentaje de población con ingresos por unidad consumo menor del 60 de la mediana 2020",
+    "label": "Población con ingresos por unidad de consumo menor al 60% de la mediana",
+    "label_en": "Population (%) with income per consumption unit smaller than 60% of the median",
+    "attribute": "Poblacion con ingresos por unidad de consumo por debajo del 60% de la mediana"
   },
   {
     "sortOrder": 5,
-    "label": "Población con ingresos por unidad de consumo mayor del 200% de la mediana"
+    "layer_title": "Por de población con ingresos por unidad de consumo mayor del 200 de la mediana 2020",
+    "label": "Población con ingresos por unidad de consumo mayor del 200% de la mediana",
+    "label_en": "Population (%) with income per consumption unit greater than 200% of the median",
+    "attribute": "Poblacion con ingresos por unidad de consumo por encima del 200% de la mediana"
   },
   {
     "sortOrder": 6,
-    "label": "Población menor de 18 años con ingresos por unidad de consumo menor del 60% de la mediana"
+    "layer_title": "Por de pob menor 18 años ingresos por unidad de consumo menor del 60 de la mediana 2020",
+    "label": "Población menor de 18 años con ingresos por unidad de consumo menor del 60% de la mediana",
+    "label_en": "Population (%) under 18 with income per consumption unit less than 60% of the median",
+    "attribute": "Poblacion menor de 18 años con ingresos por unidad de consumo por debajo del 60% de la mediana"
   },
   {
     "sortOrder": 7,
-    "label": "Población menor de 18 años"
+    "layer_title": "Porcentaje de población menor de 18 años 2020",
+    "label": "Población menor de 18 años",
+    "label_en": "Population (%) under 18",
+    "attribute": "Poblacion menor de 18 años"
   },
   {
     "sortOrder": 8,
-    "label": "Población mayor de 65 años"
+    "layer_title": "Porcentaje de población mayor de 65 años 2020",
+    "label": "Población mayor de 65 años",
+    "label_en": "Population (%) with ages 65 or more",
+    "attribute": "Poblacion de 65 y más años"
   },
   {
     "sortOrder": 9,
-    "label": "Índice de Gini"
+    "layer_title": "Índice de Gini 2020",
+    "label": "Índice de Gini",
+    "label_en": "Gini Index",
+    "attribute": "Índice de Gini"
   }
 ]

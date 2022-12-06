@@ -1,0 +1,21 @@
+form {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  font-weight: 500;
+  margin-right: 20px;
+}
+
+.langInputBlock {
+  padding: 5px;
+  display: flex;
+}
+
+input {
+  margin-right: 10px;
+  height: 2em;
+}
+
+label {
+  padding-top: 4px;
+}

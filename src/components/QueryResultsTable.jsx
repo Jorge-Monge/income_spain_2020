@@ -5,43 +5,74 @@ import JmLogo from "./JmLogo"
 import classes from "./QueryResultsTable.module.css"
 
 const fieldNames = [
-  { DATO1: "Renta neta media por persona" },
-  { DATO2: "Renta neta media por hogar" },
   {
-    DATO3:
-      "Poblacion con ingresos por unidad de consumo por debajo de 7.500 Euros",
+    DATO1: {
+      es: "Renta neta media por persona",
+      en: "Average income per person",
+    },
   },
   {
-    DATO4:
-      "Poblacion con ingresos por unidad de consumo por debajo del 60% de la mediana",
+    DATO2: {
+      es: "Renta neta media por hogar",
+      en: "Average income per household",
+    },
   },
   {
-    DATO5:
-      "Poblacion con ingresos por unidad de consumo por encima del 200% de la mediana",
+    DATO3: {
+      es: "Poblacion con ingresos por unidad de consumo por debajo de 7.500 Euros",
+      en: "Population (%) with income per consumption unit less than 7500 €",
+    },
   },
   {
-    DATO6:
-      "Poblacion menor de 18 años con ingresos por unidad de consumo por debajo del 60% de la mediana",
+    DATO4: {
+      es: "Poblacion con ingresos por unidad de consumo por debajo del 60% de la mediana",
+      en: "Population (%) with income per consumption unit smaller than 60% of the median",
+    },
   },
-  { DATO7: "Poblacion menor de 18 años" },
-  { DATO8: "Poblacion de 65 y más años" },
-  { DATO9: "Índice de Gini" },
+  {
+    DATO5: {
+      es: "Poblacion con ingresos por unidad de consumo por encima del 200% de la mediana",
+      en: "Population (%) with income per consumption unit greater than 200% of the median",
+    },
+  },
+  {
+    DATO6: {
+      es: "Poblacion menor de 18 años con ingresos por unidad de consumo por debajo del 60% de la mediana",
+      en: "Population (%) under 18 with income per consumption unit less than 60% of the median",
+    },
+  },
+  {
+    DATO7: { es: "Poblacion menor de 18 años", en: "Population (%) under 18" },
+  },
+  {
+    DATO8: {
+      es: "Poblacion de 65 y más años",
+      en: "Population (%) with ages 65 or more",
+    },
+  },
+  { DATO9: { es: "Índice de Gini", en: "Gini Index" } },
 ]
 
-const cleanSortObject = (dataObj) => {
+const cleanSortObject = (dataObj, language) => {
   /* Very dataset-specific function to reorder attributes and aggregate them. */
 
   const queryResultsObj = dataObj.results
 
   // Go from dictionaries having 'DATO1' as keys to others having 'Porcentaje de...' as keys
   let datoTypeFieldsRenamed = fieldNames.map((o, idx) => {
-    let out
+    let out, valLangDependant
     for (const [k, v] of Object.entries(o)) {
+      valLangDependant = v[language]
       let actualValue = queryResultsObj[k]
       // Sometimes, the value is null, in which case, we need to use the explicative text contained in fields like "NOTA1", "NOTA2", etc.
       if (!actualValue) {
         // i.e. an empty string
         actualValue = queryResultsObj[`NOTA${k.slice(-1)}`]
+        // Handling English
+        if (language === "en" && actualValue.includes("secreto")) {
+          actualValue =
+            "Data hidden for privacy reasons, due to the small size of the geographical unit"
+        }
       } else {
         // "DATO1", "DATO2", etc. contain some value. Then we need to append the units, depending on the attribute
         if ([0, 1].includes(idx)) {
@@ -52,26 +83,55 @@ const cleanSortObject = (dataObj) => {
       }
 
       const valueLocaleString = actualValue.toLocaleString("es-ES")
-      out = [v, valueLocaleString] // The loop runs only once, since 'o' will always have only 1 key
+      out = [valLangDependant, valueLocaleString] // The loop runs only once, since 'o' will always have only 1 key
     }
 
     return out
   })
 
-  return [
-    ["Municipio", queryResultsObj["NMUN"]],
-    [
-      "Nivel",
-      queryResultsObj["Nivel"] ||
-        queryResultsObj["Nivel1"] ||
-        queryResultsObj["Nivel2"],
-    ],
+  const municipLangDependant = language === "es" ? "Municipio" : "Municipality"
+  const levelTermLangDependant = language === "es" ? "Nivel" : "Level"
+  // This would be "Municipios" | "Distitos" | "Secciones" and their equivalent in English
+  const levelValue =
+    queryResultsObj["Nivel"] ||
+    queryResultsObj["Nivel1"] ||
+    queryResultsObj["Nivel2"]
+  let levelValueLangDependant
+  switch (levelValue) {
+    case "Municipios":
+      levelValueLangDependant =
+        language === "en" ? "Municipalities" : levelValue
+      break
+    case "Distritos":
+      levelValueLangDependant = language === "en" ? "Districts" : levelValue
+      break
+    case "Secciones":
+      levelValueLangDependant =
+        language === "en" ? "Census sections" : levelValue
+      break
+    default:
+      levelValueLangDependant = ""
+  }
+  let output = [
+    [municipLangDependant, queryResultsObj["NMUN"]],
+    [levelTermLangDependant, levelValueLangDependant],
     ...datoTypeFieldsRenamed,
   ]
+
+  return output
 }
 
-const flagMapVariableDataArray = (dataArray, attribBeingMapped) => {
-  //console.log("mapVariable:", attribBeingMapped)
+const flagMapVariableDataArray = (dataArray, attribBeingMapped, language) => {
+  /* Accepts an array with the results of the query, as well as the attribute being represented in the choropletic map, and it returns the same input array, but each element enriched with a 'flag' property. This attribute flags, within all the attributes for the given location, which one is being represented in the choropletic map. */
+
+  if (language === "en") {
+    fieldNames.forEach((o) => {})
+    let targetAttribEnEs = fieldNames.find(
+      (o) => Object.values(o)[0].es === attribBeingMapped
+    )
+    attribBeingMapped = Object.values(targetAttribEnEs)[0].en
+  }
+
   let output = dataArray.map((subArray) => {
     let flag = subArray[0] === attribBeingMapped ? true : undefined
     return [...subArray, flag]
@@ -85,7 +145,7 @@ const flagMapVariableDataArray = (dataArray, attribBeingMapped) => {
 
 //
 
-const QueryResultsTable = ({ data, onClose }) => {
+const QueryResultsTable = ({ data, onClose, language }) => {
   let items
 
   // ERROR HANDLING
@@ -106,18 +166,19 @@ const QueryResultsTable = ({ data, onClose }) => {
   // NO ERROR NOR ABSENCE OF DATA
   else if (data) {
     // Lots of very data-specific massaging to sort and rename attribute names, and string-modify attribute values (append the € and % characters)
-    const cleanSortedDataArray = cleanSortObject(data)
+    const cleanSortedDataArray = cleanSortObject(data, language)
 
     // cleanSortedDataArray looks like [["Municipio", "Madrid"], ["Nivel", "Distritos"], ...]
+
     // Now, let's flag the attribute linked to the variable in the map, getting something like
     // [["Municipio", "Madrid", undefined], ["Nivel", "Distritos", undefined], ["Renta media por persona", "20154.35 €", true]...]
 
     // "Main attribute", i.e. the one appearing in the chropleth map
     const attribBeingMapped = data.attribBeingMapped
-
     const flaggedDataArray = flagMapVariableDataArray(
       cleanSortedDataArray,
-      attribBeingMapped
+      attribBeingMapped,
+      language
     )
 
     items = flaggedDataArray.map(([name, value, flag], idx) => {
