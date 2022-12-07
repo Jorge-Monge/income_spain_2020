@@ -1,21 +1,34 @@
 form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  gap: 5px;
   color: white;
   font-weight: 500;
   margin-right: 20px;
+  height: 100%;
 }
 
 .langInputBlock {
-  padding: 5px;
   display: flex;
 }
 
 input {
   margin-right: 10px;
-  height: 2em;
 }
 
 label {
   padding-top: 4px;
+}
+
+@media only screen and (max-height: 530px) {
+  form {
+    font-size: smaller;
+    gap: 5px;
+    font-weight: 400;
+  }
+
+  label {
+    padding-top: 0;
+  }
 }

@@ -54,8 +54,7 @@ const text_EN = (
     <section>
       This web application consumes tile and REST services published by the
       Spanish Institute of Statistics (INE), and has been built with React and
-      the ArcGIS Javascript API. Esta aplicación consume servicios de teselas y
-      servicios RESP publicados
+      the ArcGIS Javascript API.
     </section>
     <br />
     <section>

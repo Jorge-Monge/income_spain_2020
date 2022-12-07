@@ -12,7 +12,7 @@ const LanguageSwitcher = ({ onChange, lang }) => {
           checked={lang === "en"}
           onChange={(e) => onChange(e)}
         />
-        <label htmlFor="english"> English</label>
+        <label htmlFor="english">English</label>
       </div>
 
       <div className={classes.langInputBlock}>
@@ -24,7 +24,7 @@ const LanguageSwitcher = ({ onChange, lang }) => {
           checked={lang === "es"}
           onChange={(e) => onChange(e)}
         />
-        <label htmlFor="spanish">Spanish</label>
+        <label htmlFor="spanish">Español</label>
       </div>
     </form>
   )
