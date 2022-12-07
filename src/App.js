@@ -85,7 +85,6 @@ try {
     startupLanguage = "es"
     labelKeyName = "label"
   }
-  // dummy
 } catch {
   startupLanguage = "en"
 }
@@ -355,16 +354,22 @@ const App = () => {
                     })
                   }, 1500 - (endMilSecs - startMilSecs))
                 } else {
+                  let noDataMessage =
+                    lang === "es"
+                      ? "Ubicación sin datos disponibles. Por favor seleccione otra."
+                      : "Location with no data available. Please click on a different area."
                   setQueriedRecordInfo({
-                    NODATA:
-                      "Ubicación sin datos disponibles. Por favor seleccione otra.",
+                    NODATA: noDataMessage,
                   })
                 }
               })
               .catch((error) => {
+                let errorMessage =
+                  lang === "es"
+                    ? "Error al obtener datos del Instituto Nacional de Estadística. Por favor refresque la página del navegador pulsando la tecla 'F5'"
+                    : "Error while getting data from the Spanish Institute of Statistics. Please refresh the browser's page by hitting the F5 key"
                 setQueriedRecordInfo({
-                  ERROR:
-                    "Error al obtener datos del Instituto Nacional de Estadística. Por favor refresque la página del navegador pulsando la tecla 'F5'",
+                  ERROR: errorMessage,
                 })
               })
           }
