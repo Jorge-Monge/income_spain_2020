@@ -34,6 +34,17 @@ const symbol = {
   height: "24px",
 }
 
+const queryPanelMessages = {
+  nodata: {
+    en: "Location with no data available. Please click on a different area.",
+    es: "Ubicación sin datos disponibles. Por favor seleccione otra.",
+  },
+  error: {
+    en: "Error while getting data from the Spanish Institute of Statistics. Please refresh the browser's page by hitting the F5 key",
+    es: "Error al obtener datos del Instituto Nacional de Estadística. Por favor refresque la página del navegador pulsando la tecla 'F5'",
+  },
+}
+
 let myMap
 let graphicsLayer // ArcGIS GraphicLayer instance
 let attribBeingMapped // Attribute in the tile layer supportin the choropletic map being displayed at the moment
@@ -356,8 +367,8 @@ const App = () => {
                 } else {
                   let noDataMessage =
                     lang === "es"
-                      ? "Ubicación sin datos disponibles. Por favor seleccione otra."
-                      : "Location with no data available. Please click on a different area."
+                      ? queryPanelMessages.nodata.es
+                      : queryPanelMessages.nodata.en
                   setQueriedRecordInfo({
                     NODATA: noDataMessage,
                   })
@@ -366,8 +377,8 @@ const App = () => {
               .catch((error) => {
                 let errorMessage =
                   lang === "es"
-                    ? "Error al obtener datos del Instituto Nacional de Estadística. Por favor refresque la página del navegador pulsando la tecla 'F5'"
-                    : "Error while getting data from the Spanish Institute of Statistics. Please refresh the browser's page by hitting the F5 key"
+                    ? queryPanelMessages.error.es
+                    : queryPanelMessages.error.en
                 setQueriedRecordInfo({
                   ERROR: errorMessage,
                 })
