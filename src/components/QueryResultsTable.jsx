@@ -6,51 +6,51 @@ import classes from "./QueryResultsTable.module.css"
 
 const fieldNames = [
   {
-    DATO1: {
+    dato1: {
       es: "Renta neta media por persona",
       en: "Average income per person",
     },
   },
   {
-    DATO2: {
+    dato2: {
       es: "Renta neta media por hogar",
       en: "Average income per household",
     },
   },
   {
-    DATO3: {
+    dato3: {
       es: "Poblacion con ingresos por unidad de consumo por debajo de 7.500 Euros",
       en: "Population (%) with income per consumption unit less than 7500 €",
     },
   },
   {
-    DATO4: {
+    dato4: {
       es: "Poblacion con ingresos por unidad de consumo por debajo del 60% de la mediana",
       en: "Population (%) with income per consumption unit smaller than 60% of the median",
     },
   },
   {
-    DATO5: {
+    dato5: {
       es: "Poblacion con ingresos por unidad de consumo por encima del 200% de la mediana",
       en: "Population (%) with income per consumption unit greater than 200% of the median",
     },
   },
   {
-    DATO6: {
+    dato6: {
       es: "Poblacion menor de 18 años con ingresos por unidad de consumo por debajo del 60% de la mediana",
       en: "Population (%) under 18 with income per consumption unit less than 60% of the median",
     },
   },
   {
-    DATO7: { es: "Poblacion menor de 18 años", en: "Population (%) under 18" },
+    dato7: { es: "Poblacion menor de 18 años", en: "Population (%) under 18" },
   },
   {
-    DATO8: {
+    dato8: {
       es: "Poblacion de 65 y más años",
       en: "Population (%) with ages 65 or more",
     },
   },
-  { DATO9: { es: "Índice de Gini", en: "Gini Index" } },
+  { dato9: { es: "Índice de Gini", en: "Gini Index" } },
 ]
 
 const cleanSortObject = (dataObj, language) => {
@@ -58,23 +58,23 @@ const cleanSortObject = (dataObj, language) => {
 
   const queryResultsObj = dataObj.results
 
-  // Go from dictionaries having 'DATO1' as keys to others having 'Porcentaje de...' as keys
+  // Go from dictionaries having 'dato1' as keys to others having 'Porcentaje de...' as keys
   let datoTypeFieldsRenamed = fieldNames.map((o, idx) => {
     let out, valLangDependant
     for (const [k, v] of Object.entries(o)) {
       valLangDependant = v[language]
       let actualValue = queryResultsObj[k]
-      // Sometimes, the value is null, in which case, we need to use the explicative text contained in fields like "NOTA1", "NOTA2", etc.
+      // Sometimes, the value is null, in which case, we need to use the explicative text contained in fields like "nota1", "nota2", etc.
       if (!actualValue) {
         // i.e. an empty string
-        actualValue = queryResultsObj[`NOTA${k.slice(-1)}`]
+        actualValue = queryResultsObj[`nota${k.slice(-1)}`]
         // Handling English
         if (language === "en" && actualValue.includes("secreto")) {
           actualValue =
             "Data hidden for privacy reasons, due to the small size of the geographical unit"
         }
       } else {
-        // "DATO1", "DATO2", etc. contain some value. Then we need to append the units, depending on the attribute
+        // "dato1", "dato2", etc. contain some value. Then we need to append the units, depending on the attribute
         if ([0, 1].includes(idx)) {
           actualValue = `${actualValue} €`
         } else if ([2, 3, 4, 5, 6, 7].includes(idx)) {

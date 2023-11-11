@@ -50,23 +50,24 @@ let graphicsLayer // ArcGIS GraphicLayer instance
 let attribBeingMapped // Attribute in the tile layer supportin the choropletic map being displayed at the moment
 let toastStartupInfoMessage = "" // Information toast at startup
 
-// There is a series of attributes with names like "NOTA1", "NOTA2", ... "NOTA9"
-const fieldNotesAttribs = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => `NOTA${num}`)
+// There is a series of attributes with names like "nota1", "nota2", ... "nota9"
+// with ancillary information about the "indicador1" field, "indicador2" field, etc.
+const fieldNotesAttribs = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => `nota${num}`)
 
 // Query launched against the feature services upon click events
 const spatQuerySkeleton = {
   spatialRelationship: "intersects",
   outFields: [
-    "DATO1",
-    "DATO2",
-    "DATO3",
-    "DATO4",
-    "DATO5",
-    "DATO6",
-    "DATO7",
-    "DATO8",
-    "DATO9",
-    "NMUN",
+    "dato1",
+    "dato2",
+    "dato3",
+    "dato4",
+    "dato5",
+    "dato6",
+    "dato7",
+    "dato8",
+    "dato9",
+    "nmun",
     ...fieldNotesAttribs,
   ],
   returnGeometry: false,
@@ -321,6 +322,7 @@ const App = () => {
             setOpenRecordInfoWidget(true)
 
             const featServiceUrl = process.env.REACT_APP_QUERY_FEAT_SERVICE
+
             let featLayer = new FeatureLayer({
               url: `${featServiceUrl}${subLayer.id}`,
             })
@@ -329,13 +331,13 @@ const App = () => {
             let newField = ""
             switch (subLayer.id) {
               case 1:
-                newField = "Nivel"
+                newField = "nivel"
                 break
               case 2:
-                newField = "Nivel1"
+                newField = "nivel1"
                 break
               case 3:
-                newField = "Nivel2"
+                newField = "nivel2"
                 break
               default:
                 newField = ""
