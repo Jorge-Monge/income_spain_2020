@@ -2,6 +2,13 @@
 
 ---
 
+**_ UPDATE NOVEMBER 2023 _**
+The tile services that this application used have been decommissioned (or their location has been modified) by the owner.
+
+The application no longer works :-(
+
+---
+
 ![React badge](/assets/badges/React-20232A.svg "React") ![HTML5 badge](/assets/badges/HTML5-E34F26.svg "HTML5") ![CSS3 badge](/assets/badges/CSS3-1572B6.svg "CSS3") ![Javascript badge](/assets/badges/JavaScript-F7DF1E.svg "Javascript")
 
 ### Objectives
