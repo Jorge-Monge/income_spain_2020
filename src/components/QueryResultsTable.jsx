@@ -93,9 +93,9 @@ const cleanSortObject = (dataObj, language) => {
   const levelTermLangDependant = language === "es" ? "Nivel" : "Level"
   // This would be "Municipios" | "Distitos" | "Secciones" and their equivalent in English
   const levelValue =
-    queryResultsObj["Nivel"] ||
-    queryResultsObj["Nivel1"] ||
-    queryResultsObj["Nivel2"]
+    queryResultsObj["nivel"] ||
+    queryResultsObj["nivel1"] ||
+    queryResultsObj["nivel2"]
   let levelValueLangDependant
   switch (levelValue) {
     case "Municipios":
@@ -113,7 +113,7 @@ const cleanSortObject = (dataObj, language) => {
       levelValueLangDependant = ""
   }
   let output = [
-    [municipLangDependant, queryResultsObj["NMUN"]],
+    [municipLangDependant, queryResultsObj["nmun"]],
     [levelTermLangDependant, levelValueLangDependant],
     ...datoTypeFieldsRenamed,
   ]
@@ -147,7 +147,7 @@ const flagMapVariableDataArray = (dataArray, attribBeingMapped, language) => {
 
 const QueryResultsTable = ({ data, onClose, language }) => {
   let items
-
+  console.log({ data })
   // ERROR HANDLING
   if (data && Object.keys(data).includes("ERROR")) {
     items = (
@@ -186,7 +186,7 @@ const QueryResultsTable = ({ data, onClose, language }) => {
         flag === true
           ? `${classes.queryRow} ${classes.selected}`
           : classes.queryRow
-
+      console.log({ name, value })
       return (
         <li key={idx} className={rowClassName}>
           <div className={classes.queryName}>{name}</div>
