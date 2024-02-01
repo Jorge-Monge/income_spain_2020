@@ -12,6 +12,7 @@ const basemap = new Basemap({
 const createMapView = (viewContainer, previousMapViewProperties) => {
   const map = new WebMap({
     basemap,
+    portalItem: { id: "3a9cc3041067491f845e76f0f3625ab1" },
   })
 
   return new MapView({
